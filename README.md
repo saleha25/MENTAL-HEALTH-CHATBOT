@@ -214,3 +214,4 @@
 # [Asmamujtaba] Fix typo — 2026-03-15 15:56
 # [saleha25] Refactor code — 2026-04-07 13:23
 # [amolic] UI update — 2026-03-22 13:46
+# [amolic] Update README — 2026-04-07 16:56
