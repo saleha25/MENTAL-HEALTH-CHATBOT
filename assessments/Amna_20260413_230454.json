@@ -1,0 +1,26 @@
+{
+  "resourceType": "MentalHealthAssessment",
+  "patient_name": "Amna",
+  "role": "default",
+  "assessment_date": "2026-04-13T23:04:54.517464",
+  "phq9_scores": {
+    "phq4": 3,
+    "phq5": 0,
+    "phq7": 3,
+    "phq9": 0
+  },
+  "gad7_scores": {
+    "gad1": 0,
+    "gad2": 0
+  },
+  "who5_scores": {
+    "who1": 4,
+    "who5": 3
+  },
+  "phq9_total": 6,
+  "gad7_total": 0,
+  "who5_total": 7,
+  "severity": "Mild",
+  "emotion_detected": "emotional_support",
+  "flagged_for_followup": false
+}

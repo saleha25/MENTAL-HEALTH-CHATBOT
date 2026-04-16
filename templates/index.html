@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mental Health Support — IDP Chatbot</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+    <div class="container">
+
+        <!-- HEADER -->
+        <div class="header">
+            <div class="header-left">
+                <div class="avatar">
+                    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                        <circle cx="14" cy="14" r="14" fill="#0F6E56"/>
+                        <path d="M14 8C11.8 8 10 9.8 10 12C10 13.5 10.8 14.8 12 15.5V16H16V15.5C17.2 14.8 18 13.5 18 12C18 9.8 16.2 8 14 8Z" fill="white"/>
+                        <rect x="12" y="16" width="4" height="4" rx="1" fill="white"/>
+                    </svg>
+                </div>
+                <div class="header-text">
+                    <h1>Mental Health Support</h1>
+                    <span class="status">● Online — here for you</span>
+                </div>
+            </div>
+            <button class="reset-btn" onclick="resetChat()">New Chat</button>
+        </div>
+
+        <!-- DISCLAIMER -->
+        <div class="disclaimer">
+            This is a support tool, not a replacement for professional care.
+            If you are in immediate danger call <strong>1122</strong> or Umang: <strong>0317-4288665</strong>
+        </div>
+
+        <!-- CHAT MESSAGES -->
+        <div class="chat-box" id="chatBox">
+            <div class="message bot-message">
+                <div class="message-content">
+                    Hello. I am here to listen and support you. What is your name?
+                </div>
+                <div class="message-time">Just now</div>
+            </div>
+        </div>
+
+        <!-- TYPING INDICATOR -->
+        <div class="typing-indicator" id="typingIndicator">
+            <span></span><span></span><span></span>
+        </div>
+
+        <!-- INPUT -->
+        <div class="input-area">
+            <textarea
+                id="userInput"
+                placeholder="Type your message here..."
+                rows="1"
+                onkeydown="handleKey(event)"
+                oninput="autoResize(this)"
+            ></textarea>
+            <button class="send-btn" onclick="sendMessage()" id="sendBtn">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <path d="M2 10L18 2L10 18L9 11L2 10Z" fill="white"/>
+                </svg>
+            </button>
+        </div>
+
+        <!-- HELPLINE FOOTER -->
+        <div class="helpline-footer">
+            <span>🆘 Crisis helplines always available:</span>
+            <span><strong>1122</strong> Emergency &nbsp;|&nbsp; <strong>0317-4288665</strong> Umang &nbsp;|&nbsp; <strong>051-2890505</strong> Rozan</span>
+        </div>
+
+    </div>
+
+    <script src="/static/script.js"></script>
+
+</body>
+</html>

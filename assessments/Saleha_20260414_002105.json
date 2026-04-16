@@ -1,0 +1,27 @@
+{
+  "resourceType": "MentalHealthAssessment",
+  "patient_name": "Saleha",
+  "role": "default",
+  "assessment_date": "2026-04-14T00:21:05.624513",
+  "phq9_scores": {
+    "phq3": 1,
+    "phq4": 3,
+    "phq5": 1,
+    "phq7": 2,
+    "phq9": 1
+  },
+  "gad7_scores": {
+    "gad1": 0,
+    "gad2": 1
+  },
+  "who5_scores": {
+    "who1": 0,
+    "who5": 1
+  },
+  "phq9_total": 8,
+  "gad7_total": 1,
+  "who5_total": 1,
+  "severity": "Mild",
+  "emotion_detected": "emotional_support",
+  "flagged_for_followup": false
+}
