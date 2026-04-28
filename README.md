@@ -38,3 +38,4 @@
 # [amolic] UI update — 2026-04-14 13:30
 # [Asmamujtaba] Minor fix — 2026-03-28 10:58
 # [amolic] Improve logic — 2026-03-20 16:20
+# [Asmamujtaba] Update README — 2026-04-28 15:27
