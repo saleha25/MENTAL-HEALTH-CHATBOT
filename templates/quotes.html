@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Words of Hope — Empath AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --cream:       #f4efe6;
+  --cream-2:     #ece6d9;
+  --cream-3:     #e2dace;
+  --dark:        #2a1f0e;
+  --dark-2:      #3e2f18;
+  --green:       #1a5c42;
+  --green-2:     #0f4430;
+  --green-3:     #0F6E56;
+  --green-light: #e4efe9;
+  --orange:      #d96a35;
+  --orange-2:    #c45a28;
+  --muted:       #7a6e5f;
+  --border:      rgba(42,31,14,0.12);
+  --tan:         #b5886a;
+}
+
+html, body { min-height: 100%; background: var(--cream); font-family: 'DM Sans', sans-serif; color: var(--dark); }
+.page { display: flex; flex-direction: column; min-height: 100vh; }
+
+/* ── NAVBAR (identical to self-assessment) ── */
+nav {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 32px; background: var(--cream);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0; z-index: 10; width: 100%; position: sticky; top: 0;
+}
+.nav-left { display: flex; align-items: center; gap: 14px; }
+.idp-badge { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.idp-icon {
+  width: 42px; height: 42px; border-radius: 50%; background: var(--dark);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.brand-text { display: flex; flex-direction: column; }
+.brand-name { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 600; color: var(--dark); line-height: 1.1; }
+.brand-sub  { font-size: 10px; color: var(--muted); letter-spacing: 0.5px; text-transform: uppercase; }
+.nav-divider { width: 1px; height: 28px; background: var(--border); }
+.nav-page-label { font-size: 13px; color: var(--muted); font-weight: 400; }
+.nav-right { display: flex; align-items: center; gap: 10px; }
+.nav-btn-green {
+  background: var(--green-3); border: none; border-radius: 20px;
+  padding: 7px 16px; font-size: 13px; color: white;
+  font-family: 'DM Sans', sans-serif; cursor: pointer; font-weight: 500;
+  text-decoration: none; transition: background 0.2s, transform 0.15s;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.nav-btn-green:hover { background: var(--green-2); transform: translateY(-1px); }
+.nav-btn-orange {
+  background: var(--orange); color: white; border: none; border-radius: 20px;
+  padding: 7px 16px; font-size: 13px; font-family: 'DM Sans', sans-serif;
+  cursor: pointer; font-weight: 500; transition: background 0.2s;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.nav-btn-orange:hover { background: var(--orange-2); }
+
+/* ── MAIN ── */
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 44px 20px 60px;
+}
+
+/* ── PAGE TITLE (matches self-assessment style) ── */
+.page-title {
+  text-align: center;
+  margin-bottom: 36px;
+  animation: fadeUp 0.5s ease both;
+}
+.page-title h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 36px;
+  font-weight: 600;
+  color: var(--dark-2);
+  line-height: 1.2;
+}
+.page-title .subtitle {
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--muted);
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.subtitle-sep { color: var(--cream-3); }
+
+/* ── QUOTES GRID ── */
+.quotes-grid {
+  display: grid;
+  gap: 16px;
+  width: 100%;
+  max-width: 680px;
+}
+
+/* ── QUOTE CARD (matches self-assessment q-card style) ── */
+.quote-card {
+  background: white;
+  border-radius: 18px;
+  padding: 28px 26px 22px;
+  border: 1px solid var(--border);
+  box-shadow: 0 2px 16px rgba(42,31,14,0.07);
+  position: relative;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(16px);
+  animation: fadeUp 0.45s ease forwards;
+}
+.quote-card:nth-child(1) { animation-delay: 0.05s; }
+.quote-card:nth-child(2) { animation-delay: 0.15s; }
+.quote-card:nth-child(3) { animation-delay: 0.25s; }
+.quote-card:nth-child(4) { animation-delay: 0.35s; }
+.quote-card:nth-child(5) { animation-delay: 0.45s; }
+
+@keyframes fadeUp { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
+
+/* left accent bar — same idea as q-card top border */
+.quote-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 4px; height: 100%;
+  border-radius: 18px 0 0 18px;
+  background: var(--dark-2);
+}
+
+/* Card type variants */
+.card-quran::before,
+.card-hadith::before  { background: var(--green-3); }
+.card-quaid::before,
+.card-iqbal::before   { background: var(--tan); }
+.card-international::before { background: var(--orange); }
+
+/* Subtle tint backgrounds */
+.card-quran,
+.card-hadith  { background: #f6faf8; border-color: #d4eadb; }
+.card-quaid,
+.card-iqbal   { background: #faf8f5; border-color: #e8ddd2; }
+
+/* Big decorative open-quote */
+.quote-mark {
+  font-family: 'Playfair Display', serif;
+  font-size: 72px;
+  line-height: 1;
+  color: var(--cream-3);
+  position: absolute;
+  top: 8px; right: 20px;
+  pointer-events: none;
+  user-select: none;
+}
+.card-quran .quote-mark,
+.card-hadith .quote-mark  { color: #cde8d5; }
+.card-quaid .quote-mark,
+.card-iqbal .quote-mark   { color: #e8ddd2; }
+
+/* Quote text */
+.quote-text {
+  font-family: 'Playfair Display', serif;
+  font-size: 16px;
+  font-style: italic;
+  color: var(--dark);
+  line-height: 1.85;
+  margin-bottom: 20px;
+  padding-left: 14px;
+  padding-right: 48px;
+}
+.card-quran .quote-text,
+.card-hadith .quote-text  { color: #2a4535; }
+.card-quaid .quote-text,
+.card-iqbal .quote-text   { color: #3e2f18; }
+
+/* Footer */
+.quote-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-left: 14px;
+}
+.quote-person { display: flex; flex-direction: column; gap: 2px; }
+.person-name {
+  font-size: 13px; font-weight: 600; color: var(--dark-2);
+}
+.person-title {
+  font-size: 11px; color: var(--muted);
+}
+.card-quran .person-name,
+.card-hadith .person-name { color: #2a4535; }
+.card-quran .person-title,
+.card-hadith .person-title { color: #6aaa80; }
+.card-quaid .person-name,
+.card-iqbal .person-name  { color: var(--tan); }
+.card-quaid .person-title,
+.card-iqbal .person-title { color: #9a7a60; }
+
+/* Badge */
+.badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 4px 11px;
+  border-radius: 12px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.badge-hope       { background: #e4efe9; color: var(--green); }
+.badge-resilience { background: #e8f5f0; color: var(--green-3); }
+.badge-family     { background: #f5edfb; color: #7040a0; }
+.badge-patience   { background: #fdf3e7; color: #8a6200; }
+.badge-strength   { background: #fdf0ea; color: var(--orange-2); }
+.badge-home       { background: #faeee6; color: var(--tan); }
+
+/* ── LOADING ── */
+.loading-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 70px 0;
+  color: var(--muted);
+  font-size: 13px;
+  width: 100%;
+}
+.loading-dots { display: flex; gap: 6px; }
+.loading-dots span {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--muted);
+  animation: blink 1.2s infinite;
+}
+.loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+.loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes blink { 0%,80%,100% { opacity:0.2; transform:scale(0.8); } 40% { opacity:1; transform:scale(1); } }
+
+/* ── REFRESH BUTTON ── */
+.refresh-wrap {
+  margin-top: 32px;
+  display: flex;
+  justify-content: center;
+}
+.refresh-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 28px;
+  border-radius: 20px;
+  background: var(--green-3);
+  color: white;
+  border: none;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+}
+.refresh-btn:hover  { background: var(--green-2); transform: translateY(-1px); }
+.refresh-btn:active { transform: scale(0.97); }
+.refresh-btn:disabled { background: #b0c8c0; cursor: not-allowed; transform: none; }
+.refresh-icon { width: 14px; height: 14px; transition: transform 0.45s; }
+.refresh-btn:not(:disabled):hover .refresh-icon { transform: rotate(180deg); }
+
+/* ── FOOTER NOTE ── */
+.footer-note {
+  margin-top: 28px;
+  font-size: 12px;
+  color: #c0b0a0;
+  text-align: center;
+  max-width: 400px;
+  line-height: 1.7;
+  animation: fadeUp 0.5s 0.5s ease both;
+}
+
+/* ── HELPLINE FOOTER ── */
+.helpline-footer {
+  text-align: center;
+  font-size: 11.5px;
+  color: var(--muted);
+  padding: 10px 20px;
+  background: var(--cream);
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+  align-items: center;
+}
+.helpline-footer strong { color: var(--dark-2); }
+
+@media (max-width: 600px) {
+  nav { padding: 12px 16px; }
+  .main { padding: 28px 16px 48px; }
+  .page-title h1 { font-size: 28px; }
+  .quote-text { font-size: 15px; padding-right: 32px; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- NAVBAR -->
+<nav>
+  <div class="nav-left">
+    <a class="idp-badge" href="/dashboard">
+      <div class="idp-icon">
+        <svg viewBox="0 0 18 18" fill="none" width="20" height="20">
+          <circle cx="9" cy="7" r="4" fill="white"/>
+          <rect x="7" y="11" width="4" height="5" rx="1" fill="white"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <span class="brand-name">Empath AI</span>
+        <span class="brand-sub">IDP Mental Health</span>
+      </div>
+    </a>
+    <div class="nav-divider"></div>
+    <span class="nav-page-label">Words of Hope</span>
+  </div>
+  <div class="nav-right">
+    <a href="/dashboard" class="nav-btn-green">Dashboard</a>
+    <button class="nav-btn-orange" onclick="loadQuotes()">
+      <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+        <path d="M13.5 8A5.5 5.5 0 1 1 8 2.5c1.8 0 3.4.87 4.4 2.2" stroke="white" stroke-width="1.6" stroke-linecap="round"/>
+        <path d="M12 2l.4 2.7L9.7 5" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      New Words
+    </button>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div class="main">
+
+  <div class="page-title">
+    <h1>Words of Hope</h1>
+    <div class="subtitle">
+      <span>Quran &amp; Hadith</span>
+      <span class="subtitle-sep">·</span>
+      <span>Pakistani Leaders</span>
+      <span class="subtitle-sep">·</span>
+      <span>World Voices</span>
+    </div>
+  </div>
+
+  <div class="quotes-grid" id="quotesGrid">
+    <div class="loading-wrap">
+      <div class="loading-dots"><span></span><span></span><span></span></div>
+      <span>Finding words for you...</span>
+    </div>
+  </div>
+
+  <p class="footer-note">
+    These words are here to remind you that you are not alone — many have walked through hardship and found their way through.
+  </p>
+
+</div>
+
+<!-- HELPLINE FOOTER -->
+<div class="helpline-footer">
+  <span>🆘 Crisis helplines always available:</span>
+  <span><strong>1122</strong> Emergency &nbsp;|&nbsp; <strong>0317-4288665</strong> Umang &nbsp;|&nbsp; <strong>051-2890505</strong> Rozan</span>
+</div>
+
+</div>
+
+<script>
+const BADGE_CLASS = {
+  hope:       'badge-hope',
+  resilience: 'badge-resilience',
+  family:     'badge-family',
+  patience:   'badge-patience',
+  strength:   'badge-strength',
+  home:       'badge-home'
+};
+
+async function loadQuotes() {
+  const grid = document.getElementById('quotesGrid');
+
+  grid.innerHTML = `<div class="loading-wrap">
+    <div class="loading-dots"><span></span><span></span><span></span></div>
+    <span>Finding words for you...</span>
+  </div>`;
+
+  try {
+    const res  = await fetch('/api/quotes');
+    const data = await res.json();
+
+    grid.innerHTML = '';
+    data.quotes.forEach(q => {
+      const cat      = (q.category || 'hope').toLowerCase();
+      const type     = (q.type || 'international').toLowerCase();
+      const badgeCls = BADGE_CLASS[cat] || 'badge-hope';
+      const cardCls  = ['quran','hadith'].includes(type) ? `card-${type}`
+                     : type === 'quaid' ? 'card-quaid'
+                     : type === 'iqbal' ? 'card-iqbal'
+                     : 'card-international';
+
+      const card = document.createElement('div');
+      card.className = `quote-card ${cardCls}`;
+      card.innerHTML = `
+        <span class="quote-mark">\u201C</span>
+        <p class="quote-text">${q.quote}</p>
+        <div class="quote-footer">
+          <div class="quote-person">
+            <span class="person-name">${q.person}</span>
+            <span class="person-title">${q.title}</span>
+          </div>
+          <span class="badge ${badgeCls}">${q.category}</span>
+        </div>`;
+      grid.appendChild(card);
+    });
+
+  } catch (err) {
+    grid.innerHTML = `<div class="loading-wrap" style="color:#9a7060;">
+      <span>Could not load quotes right now. Please try again.</span>
+    </div>`;
+  }
+}
+
+loadQuotes();
+</script>
+</body>
+</html>

@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Empath AI — Login / Sign Up</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --brown: #4b2e23;
+  --brown-2: #3a2219;
+  --green: #8fa66b;
+  --green-dark: #0F6E56;
+  --green-2: #0a4a3a;
+  --orange: #d96a35;
+  --bg: #f4efe6;
+  --cream-2: #ece6d9;
+  --cream-3: #e2dace;
+  --muted: #7a6e5f;
+  --border: rgba(75,46,35,0.1);
+  --error: #c94b4b;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── NAVBAR ── */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 60px;
+  background: rgba(244,239,230,0.96);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; z-index: 10;
+}
+.logo {
+  font-family: 'DM Serif Display', serif;
+  font-size: 20px; color: var(--brown);
+  display: flex; align-items: center; gap: 10px; text-decoration: none;
+}
+.logo-icon {
+  width: 36px; height: 36px; background: var(--brown);
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+}
+.back-home {
+  font-size: 13px; font-weight: 600; color: white;
+  text-decoration: none; padding: 7px 18px;
+  border-radius: 20px; background: var(--green-dark);
+  border: none; transition: all 0.2s;
+}
+.back-home:hover { background: var(--green-2); transform: translateY(-1px); }
+
+/* ── PAGE LAYOUT ── */
+.page {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: calc(100vh - 69px);
+}
+
+/* ── LEFT PANEL ── */
+.left-panel {
+  background: var(--brown);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 72px 64px;
+  position: relative;
+  overflow: hidden;
+}
+.left-panel::before {
+  content: '';
+  position: absolute; top: -80px; right: -80px;
+  width: 320px; height: 320px;
+  background: rgba(143,166,107,0.08); border-radius: 50%;
+}
+.left-panel::after {
+  content: '';
+  position: absolute; bottom: -60px; left: -60px;
+  width: 240px; height: 240px;
+  background: rgba(217,106,53,0.07); border-radius: 50%;
+}
+
+.left-eyebrow {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-size: 10px; font-weight: 700; letter-spacing: 2.5px;
+  text-transform: uppercase; color: var(--green);
+  margin-bottom: 20px;
+}
+.eyebrow-line { width: 22px; height: 1.5px; background: var(--green); display: inline-block; }
+
+.left-panel h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 46px; color: white; line-height: 1.1; margin-bottom: 20px;
+}
+.left-panel h1 em { font-style: italic; color: var(--green); }
+
+.left-panel p {
+  font-size: 14px; color: rgba(255,255,255,0.58);
+  line-height: 1.8; max-width: 340px; margin-bottom: 44px;
+}
+
+/* quote card on left */
+.left-quote {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 18px; padding: 22px 24px;
+  position: relative;
+}
+.left-quote::before {
+  content: '\201C';
+  font-family: 'DM Serif Display', serif;
+  font-size: 56px; color: rgba(255,255,255,0.08);
+  position: absolute; top: 4px; right: 16px; line-height: 1;
+}
+.left-quote p {
+  font-family: 'DM Serif Display', serif;
+  font-size: 15px; font-style: italic;
+  color: rgba(255,255,255,0.82); line-height: 1.7;
+  margin-bottom: 12px;
+}
+.left-quote-src { font-size: 11px; color: var(--green); font-weight: 600; }
+
+/* trust badges */
+.left-trust {
+  display: flex; flex-direction: column; gap: 10px; margin-top: 32px;
+}
+.trust-row {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 12px; color: rgba(255,255,255,0.45);
+}
+.trust-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+
+/* ── RIGHT PANEL — auth card ── */
+.right-panel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 40px;
+  background: var(--bg);
+}
+
+.auth-card {
+  background: white;
+  border-radius: 24px;
+  padding: 44px 40px;
+  width: 100%;
+  max-width: 420px;
+  border: 1px solid var(--border);
+  box-shadow: 0 8px 48px rgba(42,26,16,0.08);
+}
+
+.auth-header {
+  text-align: center; margin-bottom: 28px;
+}
+.auth-header h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 26px; color: var(--brown); margin-bottom: 4px;
+}
+.auth-header p { font-size: 13px; color: var(--muted); }
+
+/* TABS */
+.tabs {
+  display: flex;
+  background: var(--bg);
+  border-radius: 12px; padding: 4px; margin-bottom: 28px;
+}
+.tab-btn {
+  flex: 1; padding: 10px; border: none;
+  background: transparent; border-radius: 9px;
+  font-family: 'DM Sans', sans-serif; font-size: 13px;
+  font-weight: 600; color: var(--muted); cursor: pointer; transition: all 0.2s;
+}
+.tab-btn.active {
+  background: white; color: var(--brown);
+  box-shadow: 0 2px 10px rgba(42,26,16,0.08);
+}
+
+/* FORM */
+.form-group { margin-bottom: 16px; }
+.form-group label {
+  display: block; font-size: 12px; font-weight: 600;
+  color: var(--brown); margin-bottom: 6px; letter-spacing: 0.3px;
+}
+.form-group input {
+  width: 100%; padding: 11px 14px;
+  border: 1.5px solid var(--cream-3);
+  border-radius: 11px;
+  font-family: 'DM Sans', sans-serif; font-size: 14px;
+  color: var(--brown); background: #faf8f5;
+  transition: border-color 0.2s, background 0.2s; outline: none;
+}
+.form-group input:focus {
+  border-color: var(--green-dark); background: white;
+  box-shadow: 0 0 0 3px rgba(15,110,86,0.07);
+}
+.form-group input.error-field { border-color: var(--error); }
+
+.field-hint { font-size: 11px; color: var(--muted); margin-top: 4px; }
+.age-notice {
+  font-size: 11px; color: var(--muted); margin-top: 4px;
+  display: flex; align-items: center; gap: 4px;
+}
+
+/* ALERT */
+.alert {
+  padding: 11px 14px; border-radius: 11px;
+  font-size: 13px; font-weight: 500;
+  margin-bottom: 16px; display: none;
+}
+.alert.show { display: block; }
+.alert-error { background: #fff0f0; color: var(--error); border: 1px solid #f5d0d0; }
+.alert-success { background: #f0faf5; color: #1a6640; border: 1px solid #c0e8d0; }
+
+/* SUBMIT */
+.submit-btn {
+  width: 100%; padding: 13px;
+  border-radius: 13px; border: none;
+  background: var(--green-dark); color: white;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px; font-weight: 700;
+  cursor: pointer; transition: all 0.25s; margin-top: 4px;
+  letter-spacing: 0.2px;
+}
+.submit-btn:hover { background: var(--green-2); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(15,110,86,0.22); }
+.submit-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; }
+
+/* DIVIDER */
+.or-divider {
+  display: flex; align-items: center;
+  gap: 12px; margin: 16px 0 10px;
+  color: #c8bfb5; font-size: 11px;
+}
+.or-divider::before, .or-divider::after {
+  content: ''; flex: 1; height: 1px; background: var(--cream-3);
+}
+
+.switch-text { text-align: center; font-size: 13px; color: var(--muted); }
+.switch-text button {
+  background: none; border: none; color: var(--green-dark);
+  font-weight: 700; cursor: pointer;
+  font-family: 'DM Sans', sans-serif; font-size: 13px; padding: 0;
+}
+.switch-text button:hover { text-decoration: underline; }
+
+#signupForm { display: none; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 860px) {
+  .navbar { padding: 14px 20px; }
+  .page { grid-template-columns: 1fr; }
+  .left-panel { display: none; }
+  .right-panel { padding: 32px 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a class="logo" href="/">
+    <div class="logo-icon">
+      <svg viewBox="0 0 18 18" fill="none" width="18" height="18">
+        <circle cx="9" cy="7" r="4" fill="white"/>
+        <rect x="7" y="11" width="4" height="5" rx="1" fill="white"/>
+      </svg>
+    </div>
+    Empath AI
+  </a>
+  <a class="back-home" href="/">Back to Home</a>
+</nav>
+
+<div class="page">
+
+  <!-- LEFT PANEL -->
+  <div class="left-panel">
+    <p class="left-eyebrow"><span class="eyebrow-line"></span>IDP Mental Health Support</p>
+    <h1>Welcome<br>to <em>Empath AI</em></h1>
+    <p>A compassionate mental health companion built specifically for internally displaced people in Pakistan — available 24/7, always private.</p>
+
+    <div class="left-quote">
+      <p>"Indeed, with every hardship comes ease."</p>
+      <span class="left-quote-src">— Quran, Surah Ash-Sharh 94:5</span>
+    </div>
+
+    <div class="left-trust">
+      <div class="trust-row"><div class="trust-dot"></div>Clinically validated — PHQ-9, GAD-7, WHO-5</div>
+      <div class="trust-row"><div class="trust-dot"></div>Fully anonymous & end-to-end encrypted</div>
+      <div class="trust-row"><div class="trust-dot"></div>Culturally aware, available in Urdu</div>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="right-panel">
+    <div class="auth-card">
+
+      <div class="auth-header">
+        <h2>Hello, welcome back</h2>
+        <p>Sign in or create your account below</p>
+      </div>
+
+      <!-- TABS -->
+      <div class="tabs">
+        <button class="tab-btn active" id="loginTab" onclick="switchTab('login')">Login</button>
+        <button class="tab-btn" id="signupTab" onclick="switchTab('signup')">Sign Up</button>
+      </div>
+
+      <!-- ALERTS -->
+      <div class="alert alert-error" id="alertBox"></div>
+      <div class="alert alert-success" id="successBox"></div>
+
+      <!-- LOGIN FORM -->
+      <form id="loginForm" onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label for="loginEmail">Email Address</label>
+          <input type="email" id="loginEmail" placeholder="you@example.com" required />
+        </div>
+        <div class="form-group">
+          <label for="loginPassword">Password</label>
+          <input type="password" id="loginPassword" placeholder="Enter your password" required />
+        </div>
+        <button type="submit" class="submit-btn" id="loginBtn">Login →</button>
+        <div class="or-divider">or</div>
+        <div class="switch-text">
+          Don't have an account? <button type="button" onclick="switchTab('signup')">Sign Up</button>
+        </div>
+      </form>
+
+      <!-- SIGNUP FORM -->
+      <form id="signupForm" onsubmit="handleSignup(event)">
+        <div class="form-group">
+          <label for="signupName">Full Name</label>
+          <input type="text" id="signupName" placeholder="Your full name" required />
+        </div>
+        <div class="form-group">
+          <label for="signupEmail">Email Address</label>
+          <input type="email" id="signupEmail" placeholder="you@example.com" required />
+        </div>
+        <div class="form-group">
+          <label for="signupDob">Date of Birth</label>
+          <input type="date" id="signupDob" required />
+          <p class="age-notice">⚠ You must be 18 or older to use Empath AI.</p>
+        </div>
+        <div class="form-group">
+          <label for="signupPassword">Password</label>
+          <input type="password" id="signupPassword" placeholder="At least 6 characters" required minlength="6" />
+        </div>
+        <div class="form-group">
+          <label for="signupConfirm">Confirm Password</label>
+          <input type="password" id="signupConfirm" placeholder="Repeat your password" required />
+        </div>
+        <button type="submit" class="submit-btn" id="signupBtn">Create Account →</button>
+        <div class="or-divider">or</div>
+        <div class="switch-text">
+          Already have an account? <button type="button" onclick="switchTab('login')">Login</button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+function switchTab(tab) {
+  const loginForm  = document.getElementById('loginForm');
+  const signupForm = document.getElementById('signupForm');
+  const loginTab   = document.getElementById('loginTab');
+  const signupTab  = document.getElementById('signupTab');
+  clearAlerts();
+
+  if (tab === 'login') {
+    loginForm.style.display  = 'block';
+    signupForm.style.display = 'none';
+    loginTab.classList.add('active');
+    signupTab.classList.remove('active');
+  } else {
+    loginForm.style.display  = 'none';
+    signupForm.style.display = 'block';
+    signupTab.classList.add('active');
+    loginTab.classList.remove('active');
+  }
+}
+
+function showError(msg) {
+  const el = document.getElementById('alertBox');
+  el.textContent = msg; el.classList.add('show');
+  document.getElementById('successBox').classList.remove('show');
+}
+function showSuccess(msg) {
+  const el = document.getElementById('successBox');
+  el.textContent = msg; el.classList.add('show');
+  document.getElementById('alertBox').classList.remove('show');
+}
+function clearAlerts() {
+  document.getElementById('alertBox').classList.remove('show');
+  document.getElementById('successBox').classList.remove('show');
+}
+
+function calcAge(dob) {
+  const today = new Date(), birth = new Date(dob);
+  let age = today.getFullYear() - birth.getFullYear();
+  const m = today.getMonth() - birth.getMonth();
+  if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--;
+  return age;
+}
+
+async function handleSignup(e) {
+  e.preventDefault(); clearAlerts();
+  const name     = document.getElementById('signupName').value.trim();
+  const email    = document.getElementById('signupEmail').value.trim();
+  const dob      = document.getElementById('signupDob').value;
+  const password = document.getElementById('signupPassword').value;
+  const confirm  = document.getElementById('signupConfirm').value;
+
+  if (!dob) { showError('Please enter your date of birth.'); return; }
+  const age = calcAge(dob);
+  if (age < 18) { showError(`You must be 18 or older. You are ${age} years old.`); return; }
+  if (password !== confirm) { showError('Passwords do not match.'); return; }
+  if (password.length < 6) { showError('Password must be at least 6 characters.'); return; }
+
+  const btn = document.getElementById('signupBtn');
+  btn.disabled = true; btn.textContent = 'Creating account…';
+
+  try {
+    const res  = await fetch('/signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, password, dob })
+    });
+    const data = await res.json();
+    if (res.ok) {
+      showSuccess('Account created! Redirecting to dashboard…');
+      setTimeout(() => window.location.href = '/dashboard', 1200);
+    } else {
+      showError(data.error || 'Signup failed. Please try again.');
+    }
+  } catch { showError('Network error. Please try again.'); }
+  finally { btn.disabled = false; btn.textContent = 'Create Account →'; }
+}
+
+async function handleLogin(e) {
+  e.preventDefault(); clearAlerts();
+  const email    = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+
+  const btn = document.getElementById('loginBtn');
+  btn.disabled = true; btn.textContent = 'Logging in…';
+
+  try {
+    const res  = await fetch('/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
+    const data = await res.json();
+    if (res.ok) {
+      showSuccess(`Welcome back, ${data.name}! Redirecting…`);
+      setTimeout(() => window.location.href = '/dashboard', 1000);
+    } else {
+      showError(data.error || 'Login failed. Please check your credentials.');
+    }
+  } catch { showError('Network error. Please try again.'); }
+  finally { btn.disabled = false; btn.textContent = 'Login →'; }
+}
+
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.get('tab') === 'signup') switchTab('signup');
+</script>
+</body>
+</html>

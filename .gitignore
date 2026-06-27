@@ -1,0 +1,8 @@
+venv/
+__pycache__/
+data/
+.claude/
+anaconda_projects/
+*.db
+*.sqbpro
+.ipynb_checkpoints/

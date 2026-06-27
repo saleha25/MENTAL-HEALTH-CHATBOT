@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Empath AI — Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --brown: #4b2e23;
+  --green: #8fa66b;
+  --green-dark: #0F6E56;
+  --orange: #f47c48;
+  --bg: #f4efe6;
+  --muted: #777;
+  --danger: #c94b4b;
+  --danger-dark: #a73737;
+  --tan: #b5886a;
+  --olive: #6b7c3f;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: var(--bg);
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── NAVBAR ── */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 60px;
+  background: rgba(244,242,239,0.97);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(75,46,35,0.08);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  font-family: 'DM Serif Display', serif;
+  font-size: 20px;
+  color: var(--brown);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.logo-icon {
+  width: 36px; height: 36px;
+  background: var(--brown);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ── PROFILE DROPDOWN ── */
+.profile-wrap { position: relative; }
+
+.profile-btn {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  background: var(--brown);
+  border: none;
+  border-radius: 25px;
+  padding: 9px 18px;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  transition: background 0.2s, transform 0.2s;
+}
+.profile-btn:hover { background: #3a2219; transform: translateY(-1px); }
+
+.profile-avatar {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  background: var(--orange);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.chevron { transition: transform 0.2s; }
+.profile-btn.open .chevron { transform: rotate(180deg); }
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.14);
+  overflow: hidden;
+  min-width: 180px;
+  z-index: 200;
+  display: none;
+  animation: fadeDown 0.18s ease both;
+}
+.dropdown.open { display: block; }
+
+@keyframes fadeDown {
+  from { opacity:0; transform: translateY(-8px); }
+  to   { opacity:1; transform: translateY(0); }
+}
+
+.dd-header {
+  padding: 14px 16px 10px;
+  border-bottom: 1px solid #f0e8df;
+}
+.dd-header p { font-size: 13px; font-weight: 600; color: var(--brown); }
+.dd-header span { font-size: 11px; color: var(--muted); }
+
+.dd-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+  border: none;
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  font-family: 'DM Sans', sans-serif;
+  text-decoration: none;
+}
+.dd-sep { height: 1px; background: #f0e8df; margin: 2px 0; }
+.dd-logout { color: var(--brown); }
+.dd-logout:hover { background: #f5ede4; }
+.dd-delete { color: var(--danger); }
+.dd-delete:hover { background: #fff0f0; }
+
+/* ── PAGE ── */
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 44px 40px 56px;
+}
+
+/* ── GREETING ── */
+.greeting {
+  text-align: center;
+  margin-bottom: 34px;
+  animation: fadeUp 0.6s ease both;
+}
+.greeting-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--green);
+  margin-bottom: 8px;
+}
+.greeting h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 42px;
+  color: var(--brown);
+  line-height: 1.1;
+}
+.greeting h1 span { font-style: italic; color: var(--green); }
+.greeting p {
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 14px;
+  max-width: 440px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.7;
+}
+
+/* ── CARDS GRID ── */
+.cards-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+  width: 100%;
+  max-width: 860px;
+  animation: fadeUp 0.6s 0.1s ease both;
+}
+
+/* ── CARD BASE ── */
+.card {
+  border-radius: 24px;
+  padding: 26px 28px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1),
+              box-shadow 0.3s ease,
+              outline-color 0.2s ease;
+  text-decoration: none;
+  display: block;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+.card:hover {
+  transform: translateY(-8px) scale(1.025);
+  box-shadow: 0 28px 64px rgba(0,0,0,0.18);
+  outline-color: rgba(255,255,255,0.4);
+}
+.card::before {
+  content: '';
+  position: absolute;
+  top: -50px; right: -50px;
+  width: 170px; height: 170px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.card::after {
+  content: '';
+  position: absolute;
+  bottom: -40px; left: -30px;
+  width: 130px; height: 130px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.card-icon-wrap {
+  width: 46px; height: 46px;
+  border-radius: 13px;
+  background: rgba(255,255,255,0.14);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  margin-bottom: 14px;
+}
+.card h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 22px;
+  line-height: 1.15;
+  margin-bottom: 8px;
+  color: white;
+}
+.card p {
+  font-size: 13px;
+  line-height: 1.6;
+  margin-bottom: 14px;
+  color: rgba(255,255,255,0.75);
+}
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-bottom: 28px;
+}
+.tag {
+  padding: 5px 11px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  background: rgba(255,255,255,0.14);
+  color: rgba(255,255,255,0.9);
+}
+.card-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 11px 16px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 700;
+  color: white;
+  transition: background 0.2s;
+}
+
+/* ── CARD COLORS ── */
+.card-chat { background: var(--green-dark); }
+.card-chat .card-cta { background: rgba(255,255,255,0.15); }
+.card-chat:hover .card-cta { background: rgba(255,255,255,0.26); }
+
+.card-assessment { background: var(--brown); }
+.card-assessment .card-cta { background: var(--orange); }
+.card-assessment:hover .card-cta { background: #d96a38; }
+
+.card-wellness { background: var(--olive); }
+.card-wellness .card-cta { background: rgba(255,255,255,0.18); }
+.card-wellness:hover .card-cta { background: rgba(255,255,255,0.28); }
+
+.card-quotes { background: var(--tan); }
+.card-quotes .card-cta { background: rgba(255,255,255,0.2); }
+.card-quotes:hover .card-cta { background: rgba(255,255,255,0.32); }
+
+/* ── BOTTOM NOTE ── */
+.bottom-note {
+  margin-top: 28px;
+  text-align: center;
+  animation: fadeUp 0.6s 0.3s ease both;
+}
+.bottom-note p { font-size: 13px; color: #aaa; }
+.bottom-note span { color: var(--green-dark); font-weight: 600; }
+
+/* ── DELETE MODAL ── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+.modal-overlay.show { display: flex; }
+.modal-box {
+  width: 100%;
+  max-width: 460px;
+  background: #fff;
+  border-radius: 22px;
+  padding: 30px 28px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.18);
+  animation: fadeUp 0.25s ease both;
+}
+.modal-box h3 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 28px;
+  color: var(--brown);
+  margin-bottom: 10px;
+}
+.modal-box p {
+  font-size: 14px;
+  line-height: 1.7;
+  color: #6d6258;
+  margin-bottom: 24px;
+}
+.modal-actions { display: flex; gap: 12px; justify-content: flex-end; }
+.modal-btn {
+  border: none;
+  border-radius: 14px;
+  padding: 12px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+.modal-btn:hover { transform: translateY(-1px); }
+.modal-cancel { background: #eee5d9; color: var(--brown); }
+.modal-cancel:hover { background: #e3d9cb; }
+.modal-delete { background: var(--danger); color: white; }
+.modal-delete:hover { background: var(--danger-dark); }
+
+/* ── ANIMATION ── */
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(24px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 680px) {
+  .navbar { padding: 14px 20px; }
+  .greeting h1 { font-size: 32px; }
+  .cards-grid { grid-template-columns: 1fr; max-width: 420px; }
+  .page { padding: 28px 20px 40px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a class="logo" href="/">
+    <div class="logo-icon">
+      <svg viewBox="0 0 18 18" fill="none" width="18" height="18">
+        <circle cx="9" cy="7" r="4" fill="white"/>
+        <rect x="7" y="11" width="4" height="5" rx="1" fill="white"/>
+      </svg>
+    </div>
+    Empath AI
+  </a>
+
+  <div class="profile-wrap">
+    <button class="profile-btn" id="profileBtn" onclick="toggleDropdown()">
+      <div class="profile-avatar">AA</div>
+      {{ user_name }}
+      <svg class="chevron" width="12" height="12" viewBox="0 0 12 12" fill="none">
+        <path d="M2 4l4 4 4-4" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+    <div class="dropdown" id="dropdown">
+      <div class="dd-header">
+        <p>{{ user_name }}</p>
+        <span>My Account</span>
+      </div>
+      <a class="dd-item dd-logout" href="/logout">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M5 2H2v10h3M9 4l3 3-3 3M12 7H6" stroke="#4b2e23" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Logout
+      </a>
+      <div class="dd-sep"></div>
+      <button class="dd-item dd-delete" onclick="openDeleteModal(); closeDropdown();">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M2 4h10M5 4V3h4v1M6 7v3M8 7v3M3 4l1 8h6l1-8" stroke="#c94b4b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Delete Account
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- MAIN PAGE -->
+<div class="page">
+
+  <div class="greeting">
+    <p class="greeting-label">✦ Welcome ✦</p>
+    <h1>Hello, <span>{{ user_name }}</span> 👋</h1>
+    <p>How can we help you today? Choose one of the options below to begin your journey towards better mental wellbeing.</p>
+  </div>
+
+  <div class="cards-grid">
+
+    <!-- 1. Let's Chat -->
+    <a class="card card-chat" href="/app">
+      <div class="card-icon-wrap">🤝</div>
+      <h2>Let's Chat</h2>
+      <p>Talk openly with Empath AI — a compassionate listener trained specifically for internally displaced people in Pakistan. No judgment, always safe.</p>
+      <div class="card-tags">
+        <span class="tag">Culturally Aware</span>
+        <span class="tag">Crisis Support</span>
+        <span class="tag">Private</span>
+      </div>
+      <div class="card-cta">
+        Start Chatting
+        <svg width="17" height="17" viewBox="0 0 18 18" fill="none">
+          <path d="M4 9h10M10 5l4 4-4 4" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </a>
+
+    <!-- 2. Weekly Assessment -->
+    <a class="card card-assessment" href="/self_assessment">
+      <div class="card-icon-wrap">📋</div>
+      <h2>Weekly Self Assessment</h2>
+      <p>Answer 21 short questions covering depression, anxiety, and wellbeing. Get your personal PHQ-9, GAD-7, and WHO-5 scores with tailored guidance.</p>
+      <div class="card-tags">
+        <span class="tag">PHQ-9</span>
+        <span class="tag">GAD-7</span>
+        <span class="tag">WHO-5</span>
+        <span class="tag">~5 mins</span>
+      </div>
+      <div class="card-cta">
+        Start Assessment
+        <svg width="17" height="17" viewBox="0 0 18 18" fill="none">
+          <path d="M4 9h10M10 5l4 4-4 4" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </a>
+
+    <!-- 3. Wellness Progress -->
+    <a class="card card-wellness" href="/wellness">
+      <div class="card-icon-wrap">📈</div>
+      <h2>Wellness Progress</h2>
+      <p>Track your mental health journey over time. View trends in your assessment scores and monitor improvements in your overall wellbeing.</p>
+      <div class="card-tags">
+        <span class="tag">Score Trends</span>
+        <span class="tag">Weekly Reports</span>
+        <span class="tag">Insights</span>
+      </div>
+      <div class="card-cta">
+        View Progress
+        <svg width="17" height="17" viewBox="0 0 18 18" fill="none">
+          <path d="M4 9h10M10 5l4 4-4 4" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </a>
+
+    <!-- 4. Words of Hope -->
+    <a class="card card-quotes" href="/quotes">
+      <div class="card-icon-wrap">🕊️</div>
+      <h2>Words of Hope</h2>
+      <p>Gentle quotes from the Quran, Hadith, Quaid-e-Azam, Allama Iqbal, and voices from around the world — fresh every time you visit.</p>
+      <div class="card-tags">
+        <span class="tag">Quran &amp; Hadith</span>
+        <span class="tag">Pakistani Leaders</span>
+        <span class="tag">AI Powered</span>
+      </div>
+      <div class="card-cta">
+        Read Today's Words
+        <svg width="17" height="17" viewBox="0 0 18 18" fill="none">
+          <path d="M4 9h10M10 5l4 4-4 4" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </a>
+
+  </div>
+
+  <div class="bottom-note">
+    <p>🔒 Your conversations are <span>private and anonymous</span>.</p>
+  </div>
+
+</div>
+
+<!-- DELETE ACCOUNT MODAL -->
+<div class="modal-overlay" id="deleteModal">
+  <div class="modal-box">
+    <h3>Delete Account?</h3>
+    <p>This action will permanently remove your account and all related data. This cannot be undone.</p>
+    <div class="modal-actions">
+      <button class="modal-btn modal-cancel" onclick="closeDeleteModal()">Cancel</button>
+      <button class="modal-btn modal-delete" onclick="deleteAccount()">Yes, Delete</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function toggleDropdown() {
+  const dd = document.getElementById('dropdown');
+  const btn = document.getElementById('profileBtn');
+  dd.classList.toggle('open');
+  btn.classList.toggle('open');
+}
+
+function closeDropdown() {
+  document.getElementById('dropdown').classList.remove('open');
+  document.getElementById('profileBtn').classList.remove('open');
+}
+
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.profile-wrap')) closeDropdown();
+});
+
+function openDeleteModal() {
+  document.getElementById('deleteModal').classList.add('show');
+}
+
+function closeDeleteModal() {
+  document.getElementById('deleteModal').classList.remove('show');
+}
+
+window.addEventListener('click', function(e) {
+  const modal = document.getElementById('deleteModal');
+  if (e.target === modal) closeDeleteModal();
+});
+
+async function deleteAccount() {
+  try {
+    const response = await fetch('/delete_account', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
+    });
+    const rawText = await response.text();
+    let data = {};
+    try { data = JSON.parse(rawText); } catch(e) {
+      alert('Server error:\n' + rawText); return;
+    }
+    if (response.ok && data.success) {
+      alert(data.message || 'Your account has been deleted.');
+      window.location.href = data.redirect || '/';
+    } else {
+      alert(data.message || 'Unable to delete account right now.');
+    }
+  } catch(error) {
+    alert('Something went wrong while deleting the account.');
+  }
+}
+</script>
+
+</body>
+</html>

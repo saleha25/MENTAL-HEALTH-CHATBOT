@@ -1,0 +1,381 @@
+ * {
+
+    margin: 0;
+
+    padding: 0;
+
+    box-sizing: border-box;
+
+    font-family: "Segoe UI", sans-serif;
+
+}
+
+
+
+body {
+
+    background: #f4f2ef;
+
+}
+
+
+
+/* NAVBAR */
+
+.navbar {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 20px 60px;
+
+}
+
+
+
+.logo {
+
+    font-size: 22px;
+
+}
+
+
+
+.nav-links {
+
+    display: flex;
+
+    list-style: none;
+
+    gap: 30px;
+
+    color: #444;
+
+}
+
+
+
+.auth-buttons a {
+
+    padding: 10px 20px;
+
+    border-radius: 25px;
+
+    text-decoration: none;
+
+    margin-left: 10px;
+
+    font-size: 14px;
+
+}
+
+
+
+.signup {
+
+    background: #8fa66b;
+
+    color: white;
+
+}
+
+
+
+.login {
+
+    background: #f47c48;
+
+    color: white;
+
+}
+
+
+
+/* HERO */
+
+.hero {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 50px 80px;
+
+    position: relative;
+
+}
+
+
+
+/* ORANGE CIRCLE */
+
+.circle {
+
+    width: 450px;
+
+    height: 450px;
+
+    background: radial-gradient(circle, #ff9a6c, #f47c48);
+
+    border-radius: 50%;
+
+    box-shadow: 0 0 50px rgba(244, 124, 72, 0.5);
+
+}
+
+
+
+/* TEXT */
+
+.hero-text {
+
+    max-width: 500px;
+
+}
+
+
+
+.hero-text h1 {
+
+    font-size: 60px;
+
+    color: #4b2e23;
+
+}
+
+
+
+.hero-text span {
+
+    color: #8fa66b;
+
+}
+
+
+
+.hero-text p {
+
+    margin-top: 20px;
+
+    color: #555;
+
+    line-height: 1.5;
+
+}
+
+
+
+/* BUTTON */
+
+.demo-btn {
+
+    display: inline-block;
+
+    margin-top: 30px;
+
+    padding: 12px 25px;
+
+    border: 1px solid #444;
+
+    border-radius: 25px;
+
+    text-decoration: none;
+
+    color: #333;
+
+} * {
+
+    margin: 0;
+
+    padding: 0;
+
+    box-sizing: border-box;
+
+    font-family: "Segoe UI", sans-serif;
+
+}
+
+
+
+body {
+
+    background: #f4f2ef;
+
+}
+
+
+
+/* NAVBAR */
+
+.navbar {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 20px 60px;
+
+}
+
+
+
+.logo {
+
+    font-size: 22px;
+
+}
+
+
+
+.nav-links {
+
+    display: flex;
+
+    list-style: none;
+
+    gap: 30px;
+
+    color: #444;
+
+}
+
+
+
+.auth-buttons a {
+
+    padding: 10px 20px;
+
+    border-radius: 25px;
+
+    text-decoration: none;
+
+    margin-left: 10px;
+
+    font-size: 14px;
+
+}
+
+
+
+.signup {
+
+    background: #8fa66b;
+
+    color: white;
+
+}
+
+
+
+.login {
+
+    background: #f47c48;
+
+    color: white;
+
+}
+
+
+
+/* HERO */
+
+.hero {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 50px 80px;
+
+    position: relative;
+
+}
+
+
+
+/* ORANGE CIRCLE */
+
+.circle {
+
+    width: 450px;
+
+    height: 450px;
+
+    background: radial-gradient(circle, #ff9a6c, #f47c48);
+
+    border-radius: 50%;
+
+    box-shadow: 0 0 50px rgba(244, 124, 72, 0.5);
+
+}
+
+
+
+/* TEXT */
+
+.hero-text {
+
+    max-width: 500px;
+
+}
+
+
+
+.hero-text h1 {
+
+    font-size: 60px;
+
+    color: #4b2e23;
+
+}
+
+
+
+.hero-text span {
+
+    color: #8fa66b;
+
+}
+
+
+
+.hero-text p {
+
+    margin-top: 20px;
+
+    color: #555;
+
+    line-height: 1.5;
+
+}
+
+
+
+/* BUTTON */
+
+.demo-btn {
+
+    display: inline-block;
+
+    margin-top: 30px;
+
+    padding: 12px 25px;
+
+    border: 1px solid #444;
+
+    border-radius: 25px;
+
+    text-decoration: none;
+
+    color: #333;
+
+} 

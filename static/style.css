@@ -43,6 +43,13 @@ body {
     gap: 12px;
 }
 
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
 .avatar {
     width: 44px;
     height: 44px;
@@ -64,18 +71,48 @@ body {
     font-size: 12px;
 }
 
+/* BUTTONS IN HEADER */
 .reset-btn {
     background: rgba(255,255,255,0.2);
     color: white;
     border: none;
-    padding: 8px 16px;
+    padding: 8px 14px;
     border-radius: 20px;
     cursor: pointer;
-    font-size: 13px;
+    font-size: 12px;
+    font-weight: 500;
     transition: background 0.2s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
 }
 
 .reset-btn:hover {
+    background: rgba(255,255,255,0.3);
+}
+
+/* HOME BUTTON — stands out from other buttons */
+.home-btn {
+    background: white !important;
+    color: #0F6E56 !important;
+    border: none !important;
+    font-weight: 600 !important;
+}
+
+.home-btn:hover {
+    background: #f0fdf4 !important;
+    color: #085041 !important;
+}
+
+/* SELF ASSESSMENT BUTTON */
+.self-btn {
+    background: rgba(255,255,255,0.15);
+    text-decoration: none;
+}
+
+.self-btn:hover {
     background: rgba(255,255,255,0.3);
 }
 
@@ -274,13 +311,36 @@ textarea:focus {
 }
 
 /* RESPONSIVE */
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+    }
+
+    .header-actions {
+        width: 100%;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+    }
+}
+
 @media (max-width: 500px) {
-    body { padding: 0; }
+    body {
+        padding: 0;
+    }
+
     .container {
         border-radius: 0;
         height: 100vh;
         max-height: 100vh;
     }
-    .header { border-radius: 0; }
-    .helpline-footer { border-radius: 0; }
+
+    .header {
+        border-radius: 0;
+    }
+
+    .helpline-footer {
+        border-radius: 0;
+    }
 }

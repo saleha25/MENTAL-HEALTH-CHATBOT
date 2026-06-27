@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wellness Progress — Empath AI</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --cream:       #f4efe6;
+            --cream-2:     #ece6d9;
+            --cream-3:     #e2dace;
+            --dark:        #2a1f0e;
+            --dark-2:      #3e2f18;
+            --green:       #1a5c42;
+            --green-2:     #0f4430;
+            --green-3:     #0F6E56;
+            --green-light: #e4efe9;
+            --orange:      #d96a35;
+            --orange-2:    #c45a28;
+            --muted:       #7a6e5f;
+            --border:      rgba(42,31,14,0.12);
+            --tan:         #b5886a;
+        }
+
+        html, body {
+            min-height: 100%;
+            background: var(--cream);
+            font-family: 'DM Sans', sans-serif;
+            color: var(--dark);
+        }
+
+        .page { display: flex; flex-direction: column; min-height: 100vh; }
+
+        /* ── NAVBAR (matches self-assessment exactly) ── */
+        nav {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 14px 32px; background: var(--cream);
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0; z-index: 10; width: 100%; position: sticky; top: 0;
+        }
+        .nav-left { display: flex; align-items: center; gap: 14px; }
+        .idp-badge { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .idp-icon {
+            width: 42px; height: 42px; border-radius: 50%; background: var(--dark);
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .brand-text { display: flex; flex-direction: column; }
+        .brand-name { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 600; color: var(--dark); line-height: 1.1; }
+        .brand-sub  { font-size: 10px; color: var(--muted); letter-spacing: 0.5px; text-transform: uppercase; }
+        .nav-divider { width: 1px; height: 28px; background: var(--border); }
+        .nav-page-label { font-size: 13px; color: var(--muted); font-weight: 400; }
+        .nav-right { display: flex; align-items: center; gap: 10px; }
+        .nav-btn-green {
+            background: var(--green-3); border: none; border-radius: 20px;
+            padding: 7px 16px; font-size: 13px; color: white;
+            font-family: 'DM Sans', sans-serif; cursor: pointer; font-weight: 500;
+            text-decoration: none; transition: background 0.2s, transform 0.15s;
+        }
+        .nav-btn-green:hover { background: var(--green-2); transform: translateY(-1px); }
+
+        /* ── MAIN CONTENT ── */
+        .main {
+            flex: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            padding: 40px 32px 60px;
+        }
+
+        /* ── PAGE TITLE ── */
+        .page-header {
+            margin-bottom: 32px;
+            animation: fadeUp 0.5s ease both;
+        }
+        .page-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 36px;
+            font-weight: 600;
+            color: var(--dark-2);
+            line-height: 1.2;
+            margin-bottom: 6px;
+        }
+        .page-header p {
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        @keyframes fadeUp { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
+
+        /* ── SUMMARY CARDS ── */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            margin-bottom: 24px;
+            animation: fadeUp 0.5s 0.06s ease both;
+        }
+
+        .summary-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 20px 20px 18px;
+            box-shadow: 0 2px 16px rgba(42,31,14,0.06);
+            position: relative;
+            overflow: hidden;
+        }
+        .summary-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 3px;
+            background: var(--green-3);
+            border-radius: 18px 18px 0 0;
+        }
+        .summary-card:nth-child(2)::before { background: var(--orange); }
+        .summary-card:nth-child(3)::before { background: var(--tan); }
+        .summary-card:nth-child(4)::before { background: var(--dark-2); }
+
+        .mini-label {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--muted);
+            margin-bottom: 10px;
+        }
+        .big-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--green-3);
+            line-height: 1;
+            margin-bottom: 6px;
+            font-family: 'Playfair Display', serif;
+        }
+        .value-text {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--dark-2);
+            margin-bottom: 6px;
+            font-family: 'Playfair Display', serif;
+        }
+        .subtext {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        /* ── CHART GRID ── */
+        .chart-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 16px;
+            animation: fadeUp 0.5s 0.12s ease both;
+        }
+
+        .chart-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 22px 22px 18px;
+            box-shadow: 0 2px 16px rgba(42,31,14,0.06);
+        }
+
+        .chart-header { margin-bottom: 16px; }
+        .chart-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--dark-2);
+            margin-bottom: 3px;
+        }
+        .chart-subtitle {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .chart-box {
+            height: 260px;
+            position: relative;
+        }
+
+        /* ── TABLE CARD ── */
+        .table-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 22px 22px 8px;
+            box-shadow: 0 2px 16px rgba(42,31,14,0.06);
+            animation: fadeUp 0.5s 0.18s ease both;
+        }
+
+        .table-wrap { overflow-x: auto; margin-top: 16px; }
+
+        table { width: 100%; border-collapse: collapse; min-width: 600px; }
+
+        thead th {
+            text-align: left;
+            font-size: 10px;
+            letter-spacing: 0.8px;
+            color: var(--muted);
+            text-transform: uppercase;
+            font-weight: 700;
+            border-bottom: 1px solid var(--border);
+            padding: 10px 12px;
+        }
+
+        tbody td {
+            padding: 14px 12px;
+            border-bottom: 1px solid rgba(42,31,14,0.06);
+            color: var(--dark);
+            font-size: 13px;
+        }
+        tbody tr:last-child td { border-bottom: none; }
+        tbody tr:hover td { background: #faf7f2; }
+
+        .sev { font-weight: 600; font-size: 12px; padding: 3px 10px; border-radius: 10px; }
+        .sev-minimal  { background: #e4efe9; color: var(--green); }
+        .sev-mild     { background: #fdf3e7; color: #8a6200; }
+        .sev-moderate { background: #faeee6; color: var(--orange-2); }
+        .sev-severe   { background: #fde8e8; color: #c0392b; }
+
+        /* ── EMPTY STATE ── */
+        .empty-box {
+            margin-top: 24px;
+            background: white;
+            border: 1px dashed var(--border);
+            border-radius: 18px;
+            padding: 56px 24px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.7;
+            animation: fadeUp 0.5s ease both;
+        }
+        .empty-box p { max-width: 360px; margin: 0 auto; }
+
+        /* ── HELPLINE FOOTER ── */
+        .helpline-footer {
+            text-align: center;
+            font-size: 11.5px;
+            color: var(--muted);
+            padding: 10px 20px;
+            background: var(--cream);
+            border-top: 1px solid var(--border);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            justify-content: center;
+            align-items: center;
+        }
+        .helpline-footer strong { color: var(--dark-2); }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 1080px) {
+            .summary-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 760px) {
+            nav { padding: 12px 16px; }
+            .main { padding: 28px 16px 48px; }
+            .page-header h1 { font-size: 28px; }
+            .summary-grid,
+            .chart-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+
+    <!-- NAVBAR -->
+    <nav>
+        <div class="nav-left">
+            <a class="idp-badge" href="/dashboard">
+                <div class="idp-icon">
+                    <svg viewBox="0 0 18 18" fill="none" width="20" height="20">
+                        <circle cx="9" cy="7" r="4" fill="white"/>
+                        <rect x="7" y="11" width="4" height="5" rx="1" fill="white"/>
+                    </svg>
+                </div>
+                <div class="brand-text">
+                    <span class="brand-name">Empath AI</span>
+                    <span class="brand-sub">IDP Mental Health</span>
+                </div>
+            </a>
+            <div class="nav-divider"></div>
+            <span class="nav-page-label">Wellness Progress</span>
+        </div>
+        <div class="nav-right">
+            <a href="/dashboard" class="nav-btn-green">Dashboard</a>
+        </div>
+    </nav>
+
+    <!-- MAIN -->
+    <div class="main">
+
+        <div class="page-header">
+            <h1>{{ session.get('name', 'Your') }}'s Wellness Progress</h1>
+            <p>Tracking mood, sleep, and energy from your conversations — updated automatically as you chat.</p>
+        </div>
+
+        {% if has_data %}
+
+        <!-- SUMMARY -->
+        <div class="summary-grid">
+            <div class="summary-card">
+                <div class="mini-label">Avg Sleep</div>
+                <div class="big-value">{{ summary.avg_sleep }}</div>
+                <div class="subtext">hours per night</div>
+            </div>
+            <div class="summary-card">
+                <div class="mini-label">Latest Mood</div>
+                <div class="value-text">{{ summary.latest_mood }}</div>
+                <div class="subtext">from last chat</div>
+            </div>
+            <div class="summary-card">
+                <div class="mini-label">Latest Energy</div>
+                <div class="value-text">{{ summary.latest_energy }}</div>
+                <div class="subtext">from last chat</div>
+            </div>
+            <div class="summary-card">
+                <div class="mini-label">Assessments Done</div>
+                <div class="value-text">{{ summary.total_assessments }} check-ins</div>
+                <div class="subtext">weekly assessments</div>
+            </div>
+        </div>
+
+        <!-- CHARTS -->
+        <div class="chart-grid">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3 class="chart-title">Sleep Hours</h3>
+                    <p class="chart-subtitle">Hours slept — mentioned naturally in conversation</p>
+                </div>
+                <div class="chart-box"><canvas id="sleepChart"></canvas></div>
+            </div>
+
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3 class="chart-title">Mood Over Time</h3>
+                    <p class="chart-subtitle">How your mood has been — extracted from what you shared</p>
+                </div>
+                <div class="chart-box"><canvas id="moodChart"></canvas></div>
+            </div>
+
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3 class="chart-title">Energy Level</h3>
+                    <p class="chart-subtitle">Energy levels mentioned in conversation</p>
+                </div>
+                <div class="chart-box"><canvas id="energyChart"></canvas></div>
+            </div>
+
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3 class="chart-title">Assessment Score Trend</h3>
+                    <p class="chart-subtitle">PHQ-9, GAD-7 and WHO-5 over weekly check-ins — out of 10</p>
+                </div>
+                <div class="chart-box"><canvas id="assessmentChart"></canvas></div>
+            </div>
+        </div>
+
+        <!-- TABLE -->
+        <div class="table-card">
+            <div class="chart-header">
+                <h3 class="chart-title">Assessment History</h3>
+                <p class="chart-subtitle">All your weekly self-assessment results</p>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>PHQ-9 Depression</th>
+                            <th>GAD-7 Anxiety</th>
+                            <th>WHO-5 Wellbeing</th>
+                            <th>Severity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in assessment_rows %}
+                        <tr>
+                            <td>{{ row.display_date }}</td>
+                            <td>{{ row.phq10 }}/10</td>
+                            <td>{{ row.gad10 }}/10</td>
+                            <td>{{ row.who10 }}/10</td>
+                            <td><span class="sev sev-{{ row.severity|lower }}">{{ row.severity }}</span></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        {% else %}
+
+        <div class="empty-box">
+            <p>No wellness data found yet. Start chatting or complete a self-assessment to see your progress here.</p>
+        </div>
+
+        {% endif %}
+
+    </div>
+
+    <!-- HELPLINE FOOTER -->
+    <div class="helpline-footer">
+        <span>🆘 Crisis helplines always available:</span>
+        <span><strong>1122</strong> Emergency &nbsp;|&nbsp; <strong>0317-4288665</strong> Umang &nbsp;|&nbsp; <strong>051-2890505</strong> Rozan</span>
+    </div>
+
+</div>
+
+{% if has_data %}
+<script>
+    const sleepLabels  = {{ chart_data.sleep_labels  | tojson | safe }};
+    const sleepValues  = {{ chart_data.sleep_values  | tojson }};
+    const sleepColors  = {{ chart_data.sleep_colors  | tojson }};
+
+    const moodLabels   = {{ chart_data.mood_labels   | tojson }};
+    const moodValues   = {{ chart_data.mood_values   | tojson }};
+    const moodColors   = {{ chart_data.mood_colors   | tojson }};
+
+    const energyLabels = {{ chart_data.energy_labels | tojson }};
+    const energyValues = {{ chart_data.energy_values | tojson }};
+    const energyColors = {{ chart_data.energy_colors | tojson }};
+
+    const assessmentLabels = {{ chart_data.assessment_labels | tojson }};
+    const phqValues        = {{ chart_data.phq_values | tojson }};
+    const gadValues        = {{ chart_data.gad_values | tojson }};
+    const whoValues        = {{ chart_data.who_values | tojson }};
+
+    Chart.defaults.font.family = "'DM Sans', sans-serif";
+    Chart.defaults.font.size   = 12;
+    Chart.defaults.color       = '#7a6e5f';
+
+    const gridColor  = 'rgba(42,31,14,0.07)';
+    const tickColor  = '#7a6e5f';
+
+    const sharedScaleX = {
+        grid: { display: false },
+        ticks: { color: tickColor }
+    };
+
+    new Chart(document.getElementById('sleepChart'), {
+        type: 'bar',
+        data: {
+            labels: sleepLabels,
+            datasets: [{
+                label: 'Sleep Hours',
+                data: sleepValues,
+                backgroundColor: '#0F6E56',
+                borderRadius: 8,
+                borderSkipped: false,
+                maxBarThickness: 60,
+                barPercentage: 0.4,
+                categoryPercentage: 0.4
+            }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                x: sharedScaleX,
+                y: {
+                    beginAtZero: true,
+                    suggestedMax: 9,
+                    ticks: { stepSize: 1, color: tickColor },
+                    grid: { color: gridColor }
+                }
+            }
+        }
+    });
+
+    new Chart(document.getElementById('moodChart'), {
+        type: 'line',
+        data: {
+            labels: moodLabels,
+            datasets: [{
+                label: 'Mood',
+                data: moodValues,
+                borderColor: '#d96a35',
+                backgroundColor: 'rgba(217,106,53,0.08)',
+                pointBackgroundColor: moodColors,
+                pointBorderColor: '#ffffff',
+                pointBorderWidth: 2,
+                pointRadius: 6,
+                tension: 0.35,
+                fill: true
+            }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            plugins: { legend: { labels: { usePointStyle: true, color: tickColor } } },
+            scales: {
+                x: sharedScaleX,
+                y: {
+                    min: 1, max: 4,
+                    ticks: {
+                        stepSize: 1,
+                        color: tickColor,
+                        callback: v => ({1:'Very Low',2:'Low',3:'Okay',4:'Better'}[v] || v)
+                    },
+                    grid: { color: gridColor }
+                }
+            }
+        }
+    });
+
+    new Chart(document.getElementById('energyChart'), {
+        type: 'line',
+        data: {
+            labels: energyLabels,
+            datasets: [{
+                label: 'Energy',
+                data: energyValues,
+                borderColor: '#b5886a',
+                backgroundColor: 'rgba(181,136,106,0.08)',
+                pointBackgroundColor: energyColors,
+                pointBorderColor: '#ffffff',
+                pointBorderWidth: 2,
+                pointRadius: 6,
+                tension: 0.35,
+                fill: true
+            }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            plugins: { legend: { labels: { usePointStyle: true, color: tickColor } } },
+            scales: {
+                x: sharedScaleX,
+                y: {
+                    min: 1, max: 4,
+                    ticks: {
+                        stepSize: 1,
+                        color: tickColor,
+                        callback: v => ({1:'Very Low',2:'Low',3:'Medium',4:'High'}[v] || v)
+                    },
+                    grid: { color: gridColor }
+                }
+            }
+        }
+    });
+
+    new Chart(document.getElementById('assessmentChart'), {
+        type: 'line',
+        data: {
+            labels: assessmentLabels,
+            datasets: [
+                {
+                    label: 'PHQ-9 Depression',
+                    data: phqValues,
+                    borderColor: '#c45a28',
+                    backgroundColor: '#c45a28',
+                    pointRadius: 5,
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    tension: 0.3
+                },
+                {
+                    label: 'GAD-7 Anxiety',
+                    data: gadValues,
+                    borderColor: '#b5886a',
+                    backgroundColor: '#b5886a',
+                    pointRadius: 5,
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    tension: 0.3
+                },
+                {
+                    label: 'WHO-5 Wellbeing',
+                    data: whoValues,
+                    borderColor: '#0F6E56',
+                    backgroundColor: '#0F6E56',
+                    pointRadius: 5,
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    tension: 0.3
+                }
+            ]
+        },
+        options: {
+            maintainAspectRatio: false,
+            plugins: { legend: { labels: { usePointStyle: true, color: tickColor } } },
+            scales: {
+                x: sharedScaleX,
+                y: {
+                    beginAtZero: true,
+                    max: 10,
+                    ticks: { color: tickColor },
+                    grid: { color: gridColor }
+                }
+            }
+        }
+    });
+</script>
+{% endif %}
+
+</body>
+</html>

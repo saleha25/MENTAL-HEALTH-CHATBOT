@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weekly Self Assessment — Empath AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --cream:       #f4efe6;
+            --cream-2:     #ece6d9;
+            --cream-3:     #e2dace;
+            --dark:        #2a1f0e;
+            --dark-2:      #3e2f18;
+            --green:       #1a5c42;
+            --green-2:     #0f4430;
+            --green-3:     #0F6E56;
+            --green-light: #e4efe9;
+            --orange:      #d96a35;
+            --orange-2:    #c45a28;
+            --muted:       #7a6e5f;
+            --border:      rgba(42,31,14,0.12);
+        }
+
+        html, body { min-height: 100%; background: var(--cream); font-family: 'DM Sans', sans-serif; color: var(--dark); }
+        .page { display: flex; flex-direction: column; min-height: 100vh; }
+
+        nav {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 14px 32px; background: var(--cream);
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0; z-index: 10; width: 100%; position: sticky; top: 0;
+        }
+        .nav-left { display: flex; align-items: center; gap: 14px; }
+        .idp-badge { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .idp-icon {
+            width: 42px; height: 42px; border-radius: 50%; background: var(--dark);
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .brand-text { display: flex; flex-direction: column; }
+        .brand-name { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 600; color: var(--dark); line-height: 1.1; }
+        .brand-sub { font-size: 10px; color: var(--muted); letter-spacing: 0.5px; text-transform: uppercase; }
+        .nav-divider { width: 1px; height: 28px; background: var(--border); }
+        .nav-page-label { font-size: 13px; color: var(--muted); font-weight: 400; }
+        .nav-right { display: flex; align-items: center; gap: 10px; }
+        .nav-btn-green {
+            background: var(--green); border: none; border-radius: 20px;
+            padding: 7px 16px; font-size: 13px; color: white;
+            font-family: 'DM Sans', sans-serif; cursor: pointer; font-weight: 500;
+            text-decoration: none; transition: background 0.2s, transform 0.15s;
+        }
+        .nav-btn-green:hover { background: var(--green-2); transform: translateY(-1px); }
+        .nav-btn-ghost {
+            background: transparent; border: 1px solid var(--border);
+            border-radius: 20px; padding: 7px 16px; font-size: 13px; color: var(--muted);
+            font-family: 'DM Sans', sans-serif; cursor: pointer; text-decoration: none;
+            transition: background 0.2s, color 0.2s; font-weight: 500;
+        }
+        .nav-btn-ghost:hover { background: var(--cream-2); color: var(--dark); }
+        .nav-btn-orange {
+            background: var(--orange); color: white; border: none; border-radius: 20px;
+            padding: 7px 16px; font-size: 13px; font-family: 'DM Sans', sans-serif;
+            cursor: pointer; font-weight: 500; transition: background 0.2s;
+        }
+        .nav-btn-orange:hover { background: var(--orange-2); }
+
+        .disclaimer {
+            background: #fff8f0; border-bottom: 1px solid rgba(217,106,53,0.18);
+            padding: 9px 32px; font-size: 12.5px; color: #7a4a20;
+            text-align: center; flex-shrink: 0; line-height: 1.5;
+        }
+        .disclaimer strong { color: var(--orange); }
+
+        .main { flex: 1; padding: 40px 20px 56px; display: flex; flex-direction: column; align-items: center; gap: 24px; }
+
+        .page-title { text-align: center; animation: fadeUp 0.5s ease both; }
+        .page-title h1 { font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 600; color: var(--dark-2); line-height: 1.2; }
+        .page-title .subtitle {
+            margin-top: 8px; font-size: 13px; color: var(--muted);
+            display: flex; gap: 10px; justify-content: center; align-items: center; flex-wrap: wrap;
+        }
+        .subtitle-sep { color: var(--cream-3); }
+
+        .progress-wrap { width: 100%; max-width: 680px; animation: fadeUp 0.5s 0.08s ease both; }
+        .progress-meta { display: flex; justify-content: space-between; margin-bottom: 8px; }
+        .progress-label-text { font-size: 12px; font-weight: 600; color: var(--dark-2); }
+        .progress-count { font-size: 12px; color: var(--muted); }
+        .progress-track { height: 8px; background: var(--cream-3); border-radius: 10px; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--dark-2); border-radius: 10px; transition: width 0.5s cubic-bezier(0.4,0,0.2,1); width: 0%; }
+        .progress-track { display: none; }
+        .progress-steps { display: flex; gap: 3px; margin-top: 7px; }
+        .step-dot { flex: 1; height: 3px; border-radius: 3px; background: var(--cream-3); transition: background 0.3s ease; }
+        .step-dot.done   { background: var(--dark-2); }
+        .step-dot.active { background: var(--orange); }
+
+        .questions-wrap { width: 100%; max-width: 680px; display: flex; flex-direction: column; gap: 14px; }
+
+        .q-card {
+            background: white; border-radius: 18px; padding: 24px 26px;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 16px rgba(42,31,14,0.07);
+            animation: fadeUp 0.35s ease both;
+        }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+
+        .q-card-top { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 20px; }
+        .q-num {
+            width: 40px; height: 40px; border-radius: 50%;
+            background: var(--dark-2); color: white;
+            font-size: 12px; font-weight: 700;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0; letter-spacing: 0.5px; transition: background 0.3s;
+        }
+        .q-num.answered { background: var(--green-3); }
+        .q-text { font-size: 15px; font-weight: 500; color: var(--dark); line-height: 1.6; padding-top: 8px; }
+
+        .q-opts { display: flex; flex-wrap: wrap; gap: 8px; padding-left: 54px; }
+        .opt-btn {
+            background: var(--cream); border: 1.5px solid var(--border);
+            border-radius: 10px; padding: 10px 18px;
+            font-size: 13px; font-weight: 500; color: var(--dark);
+            font-family: 'DM Sans', sans-serif; cursor: pointer;
+            transition: all 0.18s ease; text-align: left;
+        }
+        .opt-btn:hover { background: var(--cream-2); border-color: rgba(42,31,14,0.25); transform: translateY(-1px); }
+        .opt-btn.selected { background: var(--green-3); border-color: var(--green-3); color: white; }
+        .opt-btn:disabled { cursor: default; opacity: 0.7; transform: none; }
+
+        .name-input-wrap { padding-left: 54px; display: flex; gap: 10px; }
+        .name-input-wrap input {
+            flex: 1; border: 1.5px solid var(--border); border-radius: 10px;
+            padding: 11px 16px; font-size: 14px; font-family: 'DM Sans', sans-serif;
+            color: var(--dark); background: var(--cream); outline: none;
+            transition: border-color 0.2s;
+        }
+        .name-input-wrap input:focus { border-color: rgba(15,110,86,0.4); box-shadow: 0 0 0 3px rgba(15,110,86,0.08); }
+        .name-input-wrap button {
+            background: var(--green-3); border: none; border-radius: 10px;
+            padding: 11px 22px; color: white; font-size: 13px; font-weight: 600;
+            font-family: 'DM Sans', sans-serif; cursor: pointer; transition: background 0.2s;
+        }
+        .name-input-wrap button:hover { background: var(--green-2); }
+
+        .q-card.done-card { background: #fafaf8; box-shadow: none; }
+        .q-card.done-card .q-text { color: var(--muted); font-size: 14px; }
+        .answered-val {
+            padding-left: 54px; margin-top: 4px;
+            font-size: 13px; color: var(--green-3); font-weight: 600;
+        }
+
+        .result-card {
+            background: white; border-radius: 18px; padding: 30px 28px;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 24px rgba(42,31,14,0.1);
+            width: 100%; max-width: 680px;
+            animation: fadeUp 0.4s ease both;
+            white-space: pre-wrap; line-height: 1.75;
+            font-size: 14px; color: var(--dark);
+        }
+        .result-card h3 { font-family: 'Playfair Display', serif; font-size: 20px; margin-bottom: 16px; color: var(--dark-2); }
+        .score-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); }
+        .score-row:last-of-type { border-bottom: none; }
+        .score-label { font-size: 13px; color: var(--muted); }
+        .score-val { font-size: 15px; font-weight: 600; color: var(--dark-2); }
+        .score-sev { font-size: 12px; padding: 3px 10px; border-radius: 20px; font-weight: 600; }
+        .sev-minimal  { background: #e4efe9; color: var(--green); }
+        .sev-mild     { background: #fff8e7; color: #8a6200; }
+        .sev-moderate { background: #fff0e0; color: #c45a28; }
+        .sev-severe   { background: #fde8e8; color: #c0392b; }
+
+        .advice-block { margin-top: 20px; padding: 16px; background: var(--cream); border-radius: 12px; font-size: 13.5px; line-height: 1.75; color: var(--dark); }
+        .chat-cta {
+            margin-top: 20px; display: block; text-align: center;
+            background: var(--green-3); color: white; border-radius: 12px;
+            padding: 14px; font-size: 14px; font-weight: 600;
+            text-decoration: none; transition: background 0.2s;
+        }
+        .chat-cta:hover { background: var(--green-2); }
+
+        .crisis-card {
+            background: #fff0f0; border: 1.5px solid rgba(192,57,43,0.3);
+            border-radius: 18px; padding: 24px 26px;
+            width: 100%; max-width: 680px;
+            animation: fadeUp 0.35s ease both;
+        }
+        .crisis-card p { font-size: 14px; line-height: 1.75; color: #7b2020; }
+        .crisis-card strong { color: #c0392b; }
+
+        .loading-dots { display: flex; gap: 5px; padding-left: 54px; }
+        .loading-dots span {
+            width: 8px; height: 8px; border-radius: 50%; background: var(--muted);
+            animation: blink 1.2s infinite;
+        }
+        .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+        .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes blink { 0%,80%,100% { opacity: 0.2; transform: scale(0.8); } 40% { opacity: 1; transform: scale(1); } }
+
+        .helpline-footer {
+            text-align: center; font-size: 11.5px; color: var(--muted);
+            padding: 10px 20px; background: var(--cream);
+            border-top: 1px solid var(--border);
+            display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; align-items: center;
+        }
+        .helpline-footer strong { color: var(--dark-2); }
+    </style>
+</head>
+<body>
+<div class="page">
+
+    <nav>
+        <div class="nav-left">
+            <a class="idp-badge" href="/dashboard">
+                <div class="idp-icon">
+                    <svg viewBox="0 0 18 18" fill="none" width="20" height="20">
+                        <circle cx="9" cy="7" r="4" fill="white"/>
+                        <rect x="7" y="11" width="4" height="5" rx="1" fill="white"/>
+                    </svg>
+                </div>
+                <div class="brand-text">
+                    <span class="brand-name">Empath AI</span>
+                    <span class="brand-sub">IDP Mental Health</span>
+                </div>
+            </a>
+            <div class="nav-divider"></div>
+            <span class="nav-page-label">Self Assessment</span>
+        </div>
+        <div class="nav-right">
+            <a href="/dashboard" class="nav-btn-green">Dashboard</a>
+            <button class="nav-btn-orange" onclick="restartAssessment()">↺ Restart</button>
+        </div>
+    </nav>
+
+    <div class="disclaimer">
+        This is a support tool, not a replacement for professional care. &nbsp;
+        If you are in immediate danger, call <strong>1122</strong> or Umang: <strong>0317-4288665</strong>
+    </div>
+
+    <div class="main">
+
+        <div class="page-title">
+            <h1>Weekly Self Assessment</h1>
+            <div class="subtitle">
+                <span>PHQ-9</span><span class="subtitle-sep">·</span>
+                <span>GAD-7</span><span class="subtitle-sep">·</span>
+                <span>WHO-5</span>
+            </div>
+        </div>
+
+        <div class="progress-wrap" id="progressWrap">
+            <div class="progress-meta">
+                <span class="progress-label-text" id="progressLabel">Getting started...</span>
+                <span class="progress-count" id="progressCount">0 of 21</span>
+            </div>
+            <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+            <div class="progress-steps" id="progressSteps"></div>
+        </div>
+
+        <div class="questions-wrap" id="questionsWrap"></div>
+
+    </div>
+
+    <div class="helpline-footer">
+        <span>🆘 Crisis helplines always available:</span>
+        <span><strong>1122</strong> Emergency &nbsp;|&nbsp; <strong>0317-4288665</strong> Umang &nbsp;|&nbsp; <strong>051-2890505</strong> Rozan</span>
+    </div>
+</div>
+
+<script>
+    const TOTAL = 21;
+    let qAnswered = 0;
+    let currentQIndex = 0;
+    let isNameStep = false;
+
+    (function() {
+        const wrap = document.getElementById('progressSteps');
+        for (let i = 0; i < TOTAL; i++) {
+            const d = document.createElement('div');
+            d.className = 'step-dot';
+            d.id = 'dot-' + i;
+            wrap.appendChild(d);
+        }
+    })();
+
+    function updateProgress(answered, label) {
+        const pct = Math.round((answered / TOTAL) * 100);
+        document.getElementById('progressFill').style.width = pct + '%';
+        document.getElementById('progressCount').textContent =
+            answered >= TOTAL ? 'Complete!' : `${answered} of ${TOTAL}`;
+        document.getElementById('progressLabel').textContent =
+            label || (answered === 0 ? 'Getting started...' :
+            answered >= TOTAL ? '✓ All done!' : `Question ${answered} of ${TOTAL}`);
+
+        for (let i = 0; i < TOTAL; i++) {
+            const dot = document.getElementById('dot-' + i);
+            if (!dot) continue;
+            dot.className = 'step-dot' + (i < answered ? ' done' : i === answered ? ' active' : '');
+        }
+        qAnswered = answered;
+    }
+
+    function renderDoneCard(index, questionText, answerLabel) {
+        const num = String(index).padStart(2, '0');
+        const card = document.createElement('div');
+        card.className = 'q-card done-card';
+        card.innerHTML = `
+            <div class="q-card-top">
+                <div class="q-num answered">${num}</div>
+                <div class="q-text">${questionText}</div>
+            </div>
+            <div class="answered-val">✓ ${answerLabel}</div>`;
+        document.getElementById('questionsWrap').appendChild(card);
+    }
+
+    function renderCurrentCard(index, questionText, options, isName) {
+        const num = isName ? '—' : String(index).padStart(2, '0');
+        const wrap = document.getElementById('questionsWrap');
+
+        const card = document.createElement('div');
+        card.className = 'q-card';
+        card.id = 'current-card';
+
+        let body = '';
+        if (isName) {
+            body = `<div class="name-input-wrap">
+                <input id="nameInput" type="text" placeholder="Enter your name..." autocomplete="off"/>
+                <button onclick="submitName()">Continue →</button>
+            </div>`;
+        } else {
+            body = `<div class="q-opts" id="currentOpts">` +
+                options.map((o) =>
+                    `<button class="opt-btn" data-val="${o.value}" data-label="${o.label}"
+                        onclick="selectOpt(this)">${o.label}</button>`
+                ).join('') + `</div>`;
+        }
+
+        card.innerHTML = `
+            <div class="q-card-top">
+                <div class="q-num" id="currentNum">${num}</div>
+                <div class="q-text">${questionText}</div>
+            </div>
+            ${body}`;
+        wrap.appendChild(card);
+
+        if (isName) {
+            const inp = document.getElementById('nameInput');
+            inp.focus();
+            inp.addEventListener('keydown', e => {
+                if (e.key === 'Enter') submitName();
+            });
+        }
+
+        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function showLoadingInCard() {
+        const existing = document.getElementById('current-card');
+        if (existing && !document.getElementById('loadingDots')) {
+            existing.innerHTML += `<div class="loading-dots" id="loadingDots">
+                <span></span><span></span><span></span></div>`;
+        }
+    }
+
+    function removeLoading() {
+        const el = document.getElementById('loadingDots');
+        if (el) el.remove();
+    }
+
+    function renderResult(text) {
+        document.getElementById('progressWrap').style.display = 'none';
+
+        const wrap = document.getElementById('questionsWrap');
+        wrap.innerHTML = '';
+
+        const card = document.createElement('div');
+        card.className = 'result-card';
+
+        const lines = text.split('\n').map(l => l.trim()).filter(l => l !== '');
+        let scores = [];
+        let adviceLines = [];
+        let otherLines = [];
+        let inAdvice = false;
+
+        lines.forEach(line => {
+            if (
+                line.includes('PHQ-9') ||
+                line.includes('GAD-7') ||
+                line.includes('WHO-5')
+            ) {
+                scores.push(line);
+                return;
+            }
+
+            if (
+                line.toLowerCase().includes('personal guidance') ||
+                line.toLowerCase().includes('comments') ||
+                line.toLowerCase().includes('advice')
+            ) {
+                inAdvice = true;
+                return;
+            }
+
+            if (inAdvice) {
+                adviceLines.push(line);
+            } else {
+                otherLines.push(line);
+            }
+        });
+
+        let html = `<h3>Your Results</h3>`;
+
+        if (otherLines.length > 0) {
+            html += `<div class="advice-block" style="margin-bottom:16px;">${otherLines.join('<br>')}</div>`;
+        }
+
+        if (scores.length > 0) {
+            html += `<div style="margin-bottom:16px;">`;
+
+            scores.forEach(s => {
+                let label = s;
+                let score = '';
+                let sev = '';
+
+                const match1 = s.match(/(PHQ-9|GAD-7|WHO-5).*?:\s*([\d.]+)\/10\s*[-—–]?\s*(.*)/i);
+                const match2 = s.match(/(PHQ-9|GAD-7|WHO-5).*?Score:\s*([\d.]+)\/10\s*[-—–]\s*(.*)/i);
+
+                const match = match2 || match1;
+
+                if (match) {
+                    label = match[1];
+                    score = match[2];
+                    sev = (match[3] || '').trim();
+                }
+
+                const sevLower = sev.toLowerCase();
+                const sevClass =
+                    sevLower.includes('severe') ? 'sev-severe' :
+                    sevLower.includes('moderate') ? 'sev-moderate' :
+                    sevLower.includes('mild') ? 'sev-mild' :
+                    'sev-minimal';
+
+                html += `
+                    <div class="score-row">
+                        <span class="score-label">${label}</span>
+                        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end;">
+                            ${score ? `<span class="score-val">${score}/10</span>` : ''}
+                            ${sev ? `<span class="score-sev ${sevClass}">${sev}</span>` : ''}
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += `</div>`;
+        }
+
+        if (adviceLines.length > 0) {
+            html += `<div class="advice-block">${adviceLines.join('<br>')}</div>`;
+        }
+
+       html += `<a class="chat-cta" href="/app?crisis=1">Talk to Empath AI about your results →</a>`;
+
+        card.innerHTML = html;
+        wrap.appendChild(card);
+        card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function renderCrisis(text) {
+        document.getElementById('progressWrap').style.display = 'none';
+
+        const wrap = document.getElementById('questionsWrap');
+        wrap.innerHTML = '';
+
+        const card = document.createElement('div');
+        card.className = 'crisis-card';
+        card.innerHTML = `
+            <p>${text.replace(/\n/g, '<br>')}</p>
+            <a class="chat-cta" href="/app?crisis=1" style="margin-top:16px;display:block;">
+    Talk to Empath AI now →
+</a>`;
+        wrap.appendChild(card);
+        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function submitName() {
+        const inp = document.getElementById('nameInput');
+        const name = inp ? inp.value.trim() : '';
+        if (!name) {
+            if (inp) inp.focus();
+            return;
+        }
+
+        const card = document.getElementById('current-card');
+        if (card) {
+            card.id = '';
+            card.className = 'q-card done-card';
+            const num = card.querySelector('.q-num');
+            if (num) num.classList.add('answered');
+            const nameWrap = card.querySelector('.name-input-wrap');
+            if (nameWrap) nameWrap.innerHTML = `<div class="answered-val">✓ ${name}</div>`;
+        }
+
+        showLoadingInCard();
+        sendToBackend(name);
+    }
+
+    let lastQuestionText = '';
+    let lastOptions = [];
+    let lastSelectedLabel = '';
+
+    function selectOpt(btn) {
+        document.querySelectorAll('#currentOpts .opt-btn').forEach(b => {
+            b.disabled = true;
+            b.classList.remove('selected');
+        });
+
+        btn.classList.add('selected');
+        lastSelectedLabel = btn.dataset.label;
+
+        const num = document.getElementById('currentNum');
+        if (num) num.classList.add('answered');
+
+        setTimeout(() => {
+            const card = document.getElementById('current-card');
+            if (card) {
+                card.id = '';
+                card.className = 'q-card done-card';
+                const opts = card.querySelector('.q-opts');
+                if (opts) opts.innerHTML = `<div class="answered-val">✓ ${lastSelectedLabel}</div>`;
+            }
+
+            const newAnswered = qAnswered + 1;
+            updateProgress(newAnswered);
+            showLoadingInCard();
+            sendToBackend(btn.dataset.val);
+        }, 200);
+    }
+
+    async function sendToBackend(message) {
+        try {
+            const res = await fetch('/assessment_chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message })
+            });
+            const data = await res.json();
+            removeLoading();
+            handleBackendResponse(data);
+        } catch (err) {
+            removeLoading();
+            console.error('Assessment error:', err);
+        }
+    }
+
+    function handleBackendResponse(data) {
+        const { response, options, type } = data;
+
+        if (type === 'already_done' || type === 'result') {
+            renderResult(response);
+            updateProgress(TOTAL, '✓ Assessment complete!');
+            return;
+        }
+
+        if (type === 'crisis') {
+            renderCrisis(response);
+            updateProgress(TOTAL, 'Support needed');
+            return;
+        }
+
+        currentQIndex++;
+        renderCurrentCard(currentQIndex, response, options || [], false);
+        lastQuestionText = response;
+        lastOptions = options || [];
+    }
+
+    async function restartAssessment() {
+        await fetch('/assessment_chat_reset', { method: 'POST' });
+        document.getElementById('questionsWrap').innerHTML = '';
+        document.getElementById('progressWrap').style.display = '';
+        qAnswered = 0;
+        currentQIndex = 0;
+        isNameStep = false;
+        updateProgress(0, 'Getting started...');
+        initAssessment();
+    }
+
+    async function initAssessment() {
+        try {
+            const res = await fetch('/assessment_chat_init');
+            const data = await res.json();
+            const { response, options, type } = data;
+
+            if (type === 'already_done' || type === 'result') {
+                renderResult(response);
+                updateProgress(TOTAL, '✓ Assessment complete!');
+                return;
+            }
+
+            const isNamePrompt = (!options || options.length === 0);
+            isNameStep = isNamePrompt;
+
+            if (isNamePrompt) {
+                renderCurrentCard(0, response, [], true);
+            } else {
+                currentQIndex = 1;
+                renderCurrentCard(currentQIndex, response, options, false);
+            }
+        } catch (err) {
+            console.error('Init error:', err);
+        }
+    }
+
+    window.onload = initAssessment;
+</script>
+</body>
+</html>

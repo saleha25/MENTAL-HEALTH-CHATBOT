@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Empath AI — Mental Health Support</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --brown: #4b2e23;
+  --green: #8fa66b;
+  --green-dark: #0F6E56;
+  --orange: #f47c48;
+  --bg: #f4efe6;
+  --text: #333;
+  --muted: #777;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  font-family: 'DM Sans', sans-serif;
+  overflow-x: hidden;
+}
+
+/* ── NAVBAR ── */
+.navbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 60px;
+  background: rgba(244,239,230,0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(75,46,35,0.08);
+}
+
+.logo {
+  font-family: 'DM Serif Display', serif;
+  font-size: 20px;
+  color: var(--brown);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.logo-icon {
+  width: 36px; height: 36px;
+  background: var(--brown);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+}
+.logo-icon svg { width:18px; height:18px; }
+
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: 6px;
+}
+
+.nav-links li {
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--muted);
+  padding: 8px 16px;
+  border-radius: 20px;
+  transition: all 0.2s;
+  position: relative;
+}
+
+.nav-links li:hover { color: var(--brown); background: rgba(75,46,35,0.06); }
+.nav-links li.active { color: var(--brown); }
+.nav-links li.active::after {
+  content: '';
+  position: absolute;
+  bottom: 2px; left: 50%;
+  transform: translateX(-50%);
+  width: 18px; height: 2px;
+  background: var(--brown);
+  border-radius: 2px;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-login {
+  padding: 9px 20px;
+  border-radius: 25px;
+  color: var(--brown);
+  background: transparent;
+  border: 1.5px solid rgba(75,46,35,0.25);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  text-decoration: none;
+  transition: all 0.2s;
+  display: inline-block;
+}
+.nav-login:hover { background: rgba(75,46,35,0.07); }
+
+.nav-cta {
+  padding: 9px 22px;
+  border-radius: 25px;
+  color: white;
+  background: var(--orange);
+  font-size: 14px;
+  cursor: pointer;
+  border: none;
+  font-weight: 600;
+  transition: all 0.2s;
+  font-family: 'DM Sans', sans-serif;
+  text-decoration: none;
+  display: inline-block;
+}
+.nav-cta:hover { background: #d96a38; transform: translateY(-1px); }
+
+/* ── SECTIONS BASE ── */
+section {
+  min-height: 100vh;
+  padding-top: 76px;
+}
+
+/* ── HOME SECTION ── */
+#home {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 80px;
+  padding: 76px 80px 60px 80px;
+}
+
+.circle-wrap { position: relative; flex-shrink:0; }
+
+.circle-bg {
+  position: absolute;
+  top: -40px; left: -60px;
+  width: 220px; height: 320px;
+  background: linear-gradient(135deg, #e8e0d5, #d4c9bb);
+  border-radius: 50% 50% 40% 40% / 60% 60% 40% 40%;
+  transform: rotate(-15deg);
+}
+
+.circle {
+  width: 400px; height: 400px;
+  background: radial-gradient(circle at 35% 35%, #ffb899, #f47c48, #d45e2a);
+  border-radius: 50%;
+  box-shadow: 0 20px 80px rgba(244,124,72,0.35);
+  position: relative;
+  animation: floatCircle 5s ease-in-out infinite;
+}
+
+@keyframes floatCircle {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-16px); }
+}
+
+.hero-text { max-width: 520px; text-align: left; }
+
+.hero-text h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 68px;
+  color: var(--brown);
+  line-height: 1.05;
+}
+
+.hero-text h1 .green {
+  color: var(--green);
+  font-style: italic;
+}
+
+.hero-text p {
+  margin-top: 20px;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.75;
+  max-width: 400px;
+}
+
+.hero-btn {
+  margin-top: 36px;
+  display: block;
+  width: fit-content;
+  padding: 14px 36px;
+  border-radius: 30px;
+  background: var(--green-dark);
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.25s;
+  font-family: 'DM Sans', sans-serif;
+  letter-spacing: 0.3px;
+}
+.hero-btn:hover { background: #085041; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(15,110,86,0.3); }
+
+/* ── ABOUT SECTION ── */
+#about {
+  background: var(--bg);
+  display: flex;
+  align-items: stretch;
+  overflow: hidden;
+  padding-top: 76px;
+}
+
+.about-image {
+  width: 48%;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+  min-height: calc(100vh - 76px);
+  background: linear-gradient(135deg, #e8e0d5 0%, #d4c9bb 40%, #c8b8a2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.about-illustration {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top:0; left:0;
+}
+
+.about-content {
+  padding: 80px 70px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 52%;
+}
+
+.section-label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--green);
+  margin-bottom: 16px;
+}
+
+.about-content h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 46px;
+  color: var(--brown);
+  line-height: 1.15;
+  margin-bottom: 24px;
+}
+
+.about-content p {
+  color: #666;
+  font-size: 15px;
+  line-height: 1.8;
+  margin-bottom: 18px;
+}
+
+.about-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 28px;
+}
+
+.about-tag {
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  border: 1.5px solid;
+}
+
+.tag-brown { color: var(--brown); border-color: var(--brown); }
+.tag-green { color: var(--green-dark); border-color: var(--green); }
+.tag-orange { color: var(--orange); border-color: var(--orange); }
+
+/* ── BENEFITS SECTION ── */
+#benefits {
+  background: var(--bg);
+  padding: 76px 0 0 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.benefits-header {
+  padding: 60px 80px 40px;
+  text-align: center;
+}
+
+.benefits-header h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 52px;
+  color: var(--brown);
+  margin-bottom: 14px;
+}
+
+.benefits-header p {
+  color: var(--muted);
+  font-size: 16px;
+  max-width: 480px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+.benefits-carousel {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+.benefits-track {
+  display: flex;
+  transition: transform 0.6s cubic-bezier(0.77, 0, 0.175, 1);
+  height: 100%;
+}
+
+.benefit-slide {
+  min-width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 40px 80px 80px;
+  gap: 60px;
+}
+
+.benefit-number {
+  font-family: 'DM Serif Display', serif;
+  font-size: 120px;
+  color: rgba(75,46,35,0.06);
+  line-height: 1;
+  flex-shrink: 0;
+  width: 140px;
+  text-align: right;
+}
+
+.benefit-card {
+  flex: 1;
+  background: white;
+  border-radius: 28px;
+  padding: 56px;
+  box-shadow: 0 8px 48px rgba(0,0,0,0.07);
+  display: flex;
+  gap: 48px;
+  align-items: flex-start;
+  transition: transform 0.3s;
+}
+.benefit-card:hover { transform: translateY(-4px); }
+
+.benefit-icon-wrap {
+  width: 72px; height: 72px;
+  border-radius: 20px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 32px;
+  flex-shrink: 0;
+}
+
+.benefit-body { flex: 1; }
+
+.benefit-body h3 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 34px;
+  color: var(--brown);
+  margin-bottom: 14px;
+}
+
+.benefit-body p {
+  color: #666;
+  font-size: 15px;
+  line-height: 1.8;
+  margin-bottom: 20px;
+}
+
+.benefit-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.benefit-pill {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  background: var(--bg);
+  color: var(--brown);
+}
+
+.carousel-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 24px 80px 48px;
+}
+
+.carousel-arrow {
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  border: 1.5px solid var(--brown);
+  background: transparent;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--brown);
+  font-size: 18px;
+  transition: all 0.2s;
+}
+.carousel-arrow:hover { background: var(--brown); color: white; }
+.carousel-arrow:disabled { opacity: 0.3; cursor: default; }
+
+.carousel-dots { display: flex; gap: 8px; align-items: center; }
+
+.dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: #ccc;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.dot.active { background: var(--brown); width: 24px; border-radius: 4px; }
+
+/* ── FOOTER ── */
+footer {
+  background: var(--brown);
+  color: white;
+  padding: 48px 80px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 24px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+.footer-logo {
+  font-family: 'DM Serif Display', serif;
+  font-size: 20px;
+  display: flex; align-items: center; gap: 10px;
+  color: white;
+}
+
+.footer-logo .logo-icon {
+  background: rgba(255,255,255,0.15);
+}
+
+.footer-links {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.footer-links a {
+  color: rgba(255,255,255,0.6);
+  text-decoration: none;
+  font-size: 13px;
+  transition: color 0.2s;
+}
+.footer-links a:hover { color: white; }
+
+.footer-copy {
+  font-size: 12px;
+  color: rgba(255,255,255,0.35);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .navbar { padding: 16px 24px; }
+  .nav-links { display: none; }
+  .nav-login { display: none; }
+  #home { flex-direction: column-reverse; padding: 96px 30px 50px; gap:30px; }
+  .circle { width: 260px; height: 260px; }
+  .hero-text h1 { font-size: 44px; }
+  #about { flex-direction: column; }
+  .about-image { width: 100%; min-height: 300px; }
+  .about-content { max-width: 100%; padding: 40px 30px; }
+  .benefit-slide { flex-direction: column; padding: 30px 24px 40px; gap: 20px; }
+  .benefit-number { font-size: 60px; width: auto; text-align: left; }
+  .benefit-card { flex-direction: column; padding: 32px; }
+  .benefits-header { padding: 40px 24px 24px; }
+  .benefits-header h2 { font-size: 36px; }
+  footer { padding: 36px 24px; flex-direction: column; align-items: flex-start; gap: 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a class="logo" href="#home" onclick="setActive('home')">
+    <div class="logo-icon">
+      <svg viewBox="0 0 18 18" fill="none">
+        <circle cx="9" cy="7" r="4" fill="white"/>
+        <rect x="7" y="11" width="4" height="5" rx="1" fill="white"/>
+      </svg>
+    </div>
+    Empath AI
+  </a>
+
+  <ul class="nav-links" id="navLinks">
+    <li id="nav-home" class="active" onclick="navScrollTo('home')">Homepage</li>
+    <li id="nav-about" onclick="navScrollTo('about')">About Us</li>
+    <li id="nav-benefits" onclick="navScrollTo('benefits')">Benefits</li>
+  </ul>
+
+  <div class="nav-right">
+    <a class="nav-login" href="/login">Login</a>
+  
+  </div>
+</nav>
+
+<!-- ── HOME ── -->
+<section id="home">
+  <div class="circle-wrap">
+    <div class="circle-bg"></div>
+    <div class="circle"></div>
+  </div>
+
+  <div class="hero-text">
+    <h1>
+      Empath AI<br>
+      <span class="green">Mental Health</span>
+    </h1>
+    <p>
+      An AI-powered mental health assessment built specifically
+      for internally displaced people in Pakistan —
+      compassionate, culturally aware, and always available.
+    </p>
+    <button class="hero-btn" onclick="window.location.href='/dashboard'">Start Now →</button>
+  </div>
+</section>
+
+<!-- ── ABOUT ── -->
+<section id="about">
+
+  <div class="about-image">
+    <svg class="about-illustration" viewBox="0 0 600 700" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="600" height="700" fill="url(#skyGrad)"/>
+      <defs>
+        <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="700" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#e8d5c0"/>
+          <stop offset="100%" stop-color="#c8a882"/>
+        </linearGradient>
+        <linearGradient id="hillGrad" x1="0" y1="0" x2="0" y2="200" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#8fa66b"/>
+          <stop offset="100%" stop-color="#6b8550"/>
+        </linearGradient>
+      </defs>
+      <ellipse cx="300" cy="650" rx="450" ry="220" fill="url(#hillGrad)" opacity="0.7"/>
+      <ellipse cx="100" cy="680" rx="280" ry="160" fill="#7a9558" opacity="0.6"/>
+      <ellipse cx="500" cy="700" rx="250" ry="140" fill="#6b8550" opacity="0.5"/>
+      <polygon points="180,460 240,340 300,460" fill="#f4e4d0"/>
+      <polygon points="200,460 240,360 280,460" fill="#e8d0b8"/>
+      <rect x="215" y="400" width="50" height="60" fill="#c8a882"/>
+      <ellipse cx="240" cy="460" rx="18" ry="24" fill="#4b2e23" opacity="0.7"/>
+      <polygon points="320,480 390,350 460,480" fill="#f4e4d0"/>
+      <polygon points="345,480 390,375 435,480" fill="#e8d0b8"/>
+      <rect x="360" y="420" width="60" height="60" fill="#c8a882"/>
+      <ellipse cx="390" cy="480" rx="20" ry="26" fill="#4b2e23" opacity="0.7"/>
+      <circle cx="150" cy="510" r="18" fill="#d4a574"/>
+      <rect x="138" y="528" width="24" height="30" rx="6" fill="#8fa66b"/>
+      <line x1="138" y1="548" x2="120" y2="565" stroke="#d4a574" stroke-width="5" stroke-linecap="round"/>
+      <line x1="162" y1="548" x2="175" y2="565" stroke="#d4a574" stroke-width="5" stroke-linecap="round"/>
+      <circle cx="490" cy="490" r="20" fill="#c8956c"/>
+      <rect x="477" y="510" width="26" height="36" rx="6" fill="#f47c48"/>
+      <line x1="477" y1="525" x2="458" y2="545" stroke="#c8956c" stroke-width="5" stroke-linecap="round"/>
+      <line x1="503" y1="525" x2="520" y2="545" stroke="#c8956c" stroke-width="5" stroke-linecap="round"/>
+      <circle cx="240" cy="530" r="13" fill="#e8b48c"/>
+      <rect x="230" y="543" width="20" height="25" rx="5" fill="#f47c48" opacity="0.8"/>
+      <text x="300" y="280" font-size="48" text-anchor="middle" fill="#f47c48" opacity="0.85">♡</text>
+      <text x="300" y="200" font-family="Georgia,serif" font-size="18" text-anchor="middle" fill="#4b2e23" opacity="0.55" font-style="italic">Hope travels with us</text>
+      <rect x="0" y="590" width="600" height="110" fill="#a8884a" opacity="0.35"/>
+    </svg>
+  </div>
+
+  <div class="about-content">
+    <p class="section-label">About Us</p>
+    <h2>Built for<br>Pakistan's IDPs</h2>
+    <p>
+      Empath AI was created in response to Pakistan's growing internally displaced
+      population — millions of people who have been forced from their homes by floods,
+      conflict, and climate crises, and who carry invisible wounds alongside everything else.
+    </p>
+    <p>
+      We are a team of researchers, mental health professionals, and technologists united
+      by one belief: <strong>no one should face trauma alone.</strong> Our platform combines
+      clinically validated screening tools — PHQ-9 and GAD-7 — with culturally sensitive
+      conversation design, so every assessment feels human, not clinical.
+    </p>
+    <p>
+      Empath AI speaks your language, understands your context, and connects you to
+      real support when it matters most. We are private, safe, and always available —
+      because mental health care should have no waiting room.
+    </p>
+    <div class="about-tags">
+      <span class="about-tag tag-brown">🤝 IDP-Focused</span>
+      <span class="about-tag tag-green">🕌 Culturally Aware</span>
+      <span class="about-tag tag-orange">🔒 Private & Safe</span>
+      <span class="about-tag tag-brown">📋 PHQ-9 / GAD-7</span>
+      <span class="about-tag tag-green">🛡️ Crisis Detection</span>
+    </div>
+  </div>
+
+</section>
+
+<!-- ── BENEFITS ── -->
+<section id="benefits">
+  <div class="benefits-header">
+    <p class="section-label">Why Empath AI</p>
+    <h2>How We Help</h2>
+    <p>Each feature is designed with displaced communities at heart — practical, compassionate, and evidence-based.</p>
+  </div>
+
+  <div class="benefits-carousel">
+    <div class="benefits-track" id="benefitsTrack">
+
+      <div class="benefit-slide">
+        <div class="benefit-number">01</div>
+        <div class="benefit-card">
+          <div class="benefit-icon-wrap" style="background:#fff3eb;">🛡️</div>
+          <div class="benefit-body">
+            <h3>Real-Time Crisis Detection</h3>
+            <p>Our AI monitors every conversation for signs of acute distress, suicidal ideation, or severe trauma response — and responds immediately with compassionate guidance and emergency resources tailored for Pakistan.</p>
+            <div class="benefit-pills">
+              <span class="benefit-pill">24/7 Monitoring</span>
+              <span class="benefit-pill">Instant Alerts</span>
+              <span class="benefit-pill">Pakistan Helplines</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="benefit-slide">
+        <div class="benefit-number">02</div>
+        <div class="benefit-card">
+          <div class="benefit-icon-wrap" style="background:#edf4e6;">📋</div>
+          <div class="benefit-body">
+            <h3>Clinically Validated Screening</h3>
+            <p>Empath AI administers the gold-standard PHQ-9 for depression and GAD-7 for anxiety assessments — translated and culturally adapted for Urdu and regional languages — delivering reliable, actionable mental health scores.</p>
+            <div class="benefit-pills">
+              <span class="benefit-pill">PHQ-9</span>
+              <span class="benefit-pill">GAD-7</span>
+              <span class="benefit-pill">Urdu Support</span>
+              <span class="benefit-pill">Evidence-Based</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="benefit-slide">
+        <div class="benefit-number">03</div>
+        <div class="benefit-card">
+          <div class="benefit-icon-wrap" style="background:#fdf0e8;">🕌</div>
+          <div class="benefit-body">
+            <h3>Culturally Sensitive Design</h3>
+            <p>Mental health conversations differ across cultures. Empath AI understands Pakistani social norms, family structures, religious values, and the specific grief of displacement — so it never feels foreign or judgmental.</p>
+            <div class="benefit-pills">
+              <span class="benefit-pill">Urdu / Pashto</span>
+              <span class="benefit-pill">Islamic-Aware</span>
+              <span class="benefit-pill">Family Dynamics</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="benefit-slide">
+        <div class="benefit-number">04</div>
+        <div class="benefit-card">
+          <div class="benefit-icon-wrap" style="background:#eef5f2;">🔒</div>
+          <div class="benefit-body">
+            <h3>Private & Completely Safe</h3>
+            <p>No accounts required. No data sold. Conversations are end-to-end encrypted and never linked to your identity. For communities where stigma is a barrier, anonymity is not an option — it's a foundation.</p>
+            <div class="benefit-pills">
+              <span class="benefit-pill">Anonymous</span>
+              <span class="benefit-pill">End-to-End Encrypted</span>
+              <span class="benefit-pill">No Account Needed</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="benefit-slide">
+        <div class="benefit-number">05</div>
+        <div class="benefit-card">
+          <div class="benefit-icon-wrap" style="background:#fff3eb;">🤝</div>
+          <div class="benefit-body">
+            <h3>IDP-Specific Support</h3>
+            <p>Trained on over 140K data rows and 22K counseling conversation pairs drawn from displacement contexts, Empath AI deeply understands the layered trauma of losing home, community, and safety — and helps navigate it.</p>
+            <div class="benefit-pills">
+              <span class="benefit-pill">140K+ Training Rows</span>
+              <span class="benefit-pill">22K Counseling Pairs</span>
+              <span class="benefit-pill">Displacement-Aware</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="carousel-nav">
+    <button class="carousel-arrow" id="prevBtn" onclick="moveCarousel(-1)" disabled>←</button>
+    <div class="carousel-dots" id="dots"></div>
+    <button class="carousel-arrow" id="nextBtn" onclick="moveCarousel(1)">→</button>
+  </div>
+
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-logo">
+    <div class="logo-icon" style="width:32px;height:32px;">
+      <svg viewBox="0 0 18 18" fill="none" style="width:16px;height:16px;">
+        <circle cx="9" cy="7" r="4" fill="white"/>
+        <rect x="7" y="11" width="4" height="5" rx="1" fill="white"/>
+      </svg>
+    </div>
+    Empath AI
+  </div>
+  <div class="footer-links">
+    <a href="#home" onclick="navScrollTo('home')">Homepage</a>
+    <a href="#about" onclick="navScrollTo('about')">About Us</a>
+    <a href="#benefits" onclick="navScrollTo('benefits')">Benefits</a>
+
+    <a href="#">Privacy Policy</a>
+    <a href="#">Contact</a>
+  </div>
+  <div class="footer-copy">© 2026 Empath AI. Built for Pakistan's IDPs.</div>
+</footer>
+
+<script>
+const totalSlides = 5;
+let current = 0;
+const track = document.getElementById('benefitsTrack');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const dotsWrap = document.getElementById('dots');
+
+for (let i = 0; i < totalSlides; i++) {
+  const d = document.createElement('div');
+  d.className = 'dot' + (i === 0 ? ' active' : '');
+  d.onclick = () => goToSlide(i);
+  dotsWrap.appendChild(d);
+}
+
+function goToSlide(n) {
+  current = n;
+  track.style.transform = `translateX(-${current * 100}%)`;
+  document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === current));
+  prevBtn.disabled = current === 0;
+  nextBtn.disabled = current === totalSlides - 1;
+}
+
+function moveCarousel(dir) {
+  goToSlide(Math.min(Math.max(current + dir, 0), totalSlides - 1));
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight') moveCarousel(1);
+  if (e.key === 'ArrowLeft') moveCarousel(-1);
+});
+
+const sections = ['home', 'about', 'benefits'];
+
+function setActive(id) {
+  sections.forEach(s => {
+    const el = document.getElementById('nav-' + s);
+    if (el) el.classList.toggle('active', s === id);
+  });
+}
+
+function navScrollTo(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth' });
+}
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) setActive(e.target.id);
+  });
+}, { threshold: 0.35 });
+
+sections.forEach(s => {
+  const el = document.getElementById(s);
+  if (el) observer.observe(el);
+});
+</script>
+</body>
+</html>
