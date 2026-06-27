@@ -1,7 +1,4 @@
-# ─────────────────────────────────────────────
-# WELLNESS PAGE
-# Paste this block into app.py above the quotes route / before # RUN APP
-# ─────────────────────────────────────────────
+
 
 def _score_to_10(value, maximum):
     if value is None:
